@@ -8,6 +8,8 @@
 import UIKit
 
 enum DesignOfFont {
+    case enrollPlaceHolder
+    case enrollCellTitle
     case listHeaderTitle
     case listTitle
     case listSubTitle
@@ -16,6 +18,10 @@ enum DesignOfFont {
     
     var font: UIFont {
         switch self {
+        case.enrollPlaceHolder:
+            return .systemFont(ofSize: 17, weight: .semibold)
+        case.enrollCellTitle:
+            return .systemFont(ofSize: 17, weight: .semibold)
         case .listHeaderTitle:
             return .systemFont(ofSize: 32, weight: .semibold)
         case .listTitle:
@@ -31,6 +37,10 @@ enum DesignOfFont {
     
     var color: UIColor {
         switch self {
+        case .enrollPlaceHolder:
+            return .lightGray
+        case .enrollCellTitle:
+            return .baseFont
         case .listHeaderTitle:
             return .tintColor
         case .listTitle:

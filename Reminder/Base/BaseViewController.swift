@@ -27,6 +27,7 @@ class BaseViewController: UIViewController {
     }
     
     func configureLayout() { }
+    func configureGestureAndButtonAction() { }
     
     func showAlert(title: String,
                    message: String,
