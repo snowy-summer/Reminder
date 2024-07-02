@@ -7,15 +7,19 @@
 
 import UIKit
 import SnapKit
+import RealmSwift
 
 final class EnrollViewController: BaseViewController {
     
     private let enrollTableView = UITableView(frame: .zero,
                                               style: .insetGrouped)
+    private let model = Todo(title: "", important: 1)
+    private var saveItem = UIBarButtonItem()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(DataBaseManager.shared.realm.configuration.fileURL)
     }
     
     override func configureNavigationBar() {
@@ -25,10 +29,11 @@ final class EnrollViewController: BaseViewController {
                                          target: self,
                                          action: #selector(cancelButtonAction))
         
-        let saveItem = UIBarButtonItem(title: "저장",
-                                       style: .plain,
-                                       target: self,
-                                       action: #selector(saveButtonAction))
+        saveItem = UIBarButtonItem(title: "저장",
+                                   style: .plain,
+                                   target: self,
+                                   action: #selector(saveButtonAction))
+        saveItem.isEnabled = false
         
         navigationItem.rightBarButtonItem = saveItem
         navigationItem.leftBarButtonItem = cancelItem
@@ -50,7 +55,7 @@ final class EnrollViewController: BaseViewController {
         
         enrollTableView.register(EnrollExtraTableViewCell.self,
                                  forCellReuseIdentifier: EnrollExtraTableViewCell.identifier)
-
+        
     }
     
     override func configureLayout() {
@@ -67,11 +72,16 @@ final class EnrollViewController: BaseViewController {
 extension EnrollViewController {
     
     @objc private func cancelButtonAction() {
-        
+        dismiss(animated: true)
     }
     
     @objc private func saveButtonAction() {
         
+        DataBaseManager.shared.add(model)
+
+        self.dismiss(animated: true) {
+            NotificationCenter.default.post(name: .pushNotification, object: nil)
+        }
     }
     
 }
@@ -124,7 +134,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 return TitleAndMemoTableViewCell()
             }
             
-            
+            cell.delegate = self
             cell.updateContent(type: type)
             
             return cell
@@ -159,4 +169,19 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
         return UISwipeActionsConfiguration(actions: [delete])
     }
     
+}
+
+extension EnrollViewController: TitleAndMemoTableViewCellDelegate {
+    
+    func changeSaveButtonEnabled(text: String, placeHolder: String) {
+        
+        if !text.isEmpty && text != placeHolder {
+            
+            model.title = text
+            saveItem.isEnabled = true
+        } else {
+            saveItem.isEnabled = false
+        }
+        
+    }
 }

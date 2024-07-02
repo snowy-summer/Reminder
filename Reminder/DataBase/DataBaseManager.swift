@@ -11,11 +11,14 @@ import RealmSwift
 final class DataBaseManager {
     
     static let shared = DataBaseManager()
-    private let realm = try! Realm()
+    private(set) var realm: Realm
     
-    private init() { }
+    private init() {
+        self.realm = try! Realm()
+    }
     
     func add<T: Object>(_ object: T) {
+                
         do {
             try realm.write {
                 realm.add(object)
@@ -31,6 +34,7 @@ final class DataBaseManager {
     
     func update<T: Object>(_ object: T,
                            completion: @escaping ((T) -> ())) {
+        
             do {
                 try realm.write {
                     completion(object)
@@ -42,6 +46,7 @@ final class DataBaseManager {
         }
     
     func delete<T: Object>(_ object: T) {
+        
         do {
             try realm.write {
                 realm.delete(object)
@@ -50,6 +55,5 @@ final class DataBaseManager {
             print(error)
         }
     }
-    
     
 }

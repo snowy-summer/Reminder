@@ -8,11 +8,17 @@
 import UIKit
 import SnapKit
 
+protocol TitleAndMemoTableViewCellDelegate: AnyObject {
+    
+    func changeSaveButtonEnabled(text: String, placeHolder: String)
+}
+
 final class TitleAndMemoTableViewCell: BaseTableViewCell {
     
-    private let contentTextView = UITextView()
-    private var placeHolder: String?
-
+    private(set) var contentTextView = UITextView()
+    private(set) var placeHolder: String?
+    weak var delegate: TitleAndMemoTableViewCellDelegate?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -46,7 +52,7 @@ final class TitleAndMemoTableViewCell: BaseTableViewCell {
         
         contentTextView.text = type.text
         placeHolder = type.text
-
+        
     }
 }
 
@@ -61,11 +67,21 @@ extension TitleAndMemoTableViewCell: UITextViewDelegate {
         contentTextView.textColor = .baseFont
     }
     
+    func textViewDidChange(_ textView: UITextView) {
+        
+        let text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        delegate?.changeSaveButtonEnabled(text: text,
+                                          placeHolder: placeHolder!)
+    }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             contentTextView.text = placeHolder
             contentTextView.textColor = .lightGray
         }
+        
+        
     }
+    
 }
