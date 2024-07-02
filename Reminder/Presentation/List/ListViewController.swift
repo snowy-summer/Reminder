@@ -106,7 +106,10 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             tableView.reloadData()
         }
         
-        return UISwipeActionsConfiguration(actions: [delete])
+        let configuration = UISwipeActionsConfiguration(actions: [delete])
+        configuration.performsFirstActionWithFullSwipe = false
+        
+        return configuration
     }
     
 }
