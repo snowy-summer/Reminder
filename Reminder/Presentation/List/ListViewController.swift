@@ -27,10 +27,28 @@ final class ListViewController: BaseViewController {
         navigationItem.rightBarButtonItem = moreItem
     }
     
+    override func configureHierarchy() {
+        view.addSubview(listTableView)
+    }
+    
     override func configureUI() {
         
         listTableView.delegate = self
         listTableView.dataSource = self
+        listTableView.register(ListTableViewCell.self,
+                               forCellReuseIdentifier: ListTableViewCell.identifier)
+        let headerView = ListTableHeaderView(frame: CGRect(x: 0,
+                                                           y: 0,
+                                                           width: listTableView.frame.width,
+                                                           height: 44))
+        listTableView.tableHeaderView = headerView
+    }
+    
+    override func configureLayout() {
+        
+        listTableView.snp.makeConstraints { make in
+            make.directionalEdges.equalTo(view.safeAreaLayoutGuide)
+        }
     }
     
 }

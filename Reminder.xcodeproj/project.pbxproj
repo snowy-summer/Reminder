@@ -21,6 +21,9 @@
 		6BE742112C33FAA6009DEE99 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742102C33FAA6009DEE99 /* ListViewController.swift */; };
 		6BE742162C33FBD9009DEE99 /* Identifier+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742152C33FBD9009DEE99 /* Identifier+Extension.swift */; };
 		6BE742182C34010C009DEE99 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742172C34010C009DEE99 /* ListTableViewCell.swift */; };
+		6BE7421A2C34089A009DEE99 /* DesignOfFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742192C34089A009DEE99 /* DesignOfFont.swift */; };
+		6BE7421D2C3409B4009DEE99 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7421C2C3409B4009DEE99 /* UILabel+Extension.swift */; };
+		6BE7421F2C340B6F009DEE99 /* ListTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7421E2C340B6F009DEE99 /* ListTableHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +41,9 @@
 		6BE742102C33FAA6009DEE99 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		6BE742152C33FBD9009DEE99 /* Identifier+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Identifier+Extension.swift"; sourceTree = "<group>"; };
 		6BE742172C34010C009DEE99 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
+		6BE742192C34089A009DEE99 /* DesignOfFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignOfFont.swift; sourceTree = "<group>"; };
+		6BE7421C2C3409B4009DEE99 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		6BE7421E2C340B6F009DEE99 /* ListTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +112,7 @@
 		6BE7420C2C33F821009DEE99 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				6BE7421B2C34099D009DEE99 /* Design */,
 				6BE741F32C33DDB0009DEE99 /* Assets.xcassets */,
 				6BE741F52C33DDB0009DEE99 /* LaunchScreen.storyboard */,
 			);
@@ -133,6 +140,7 @@
 			children = (
 				6BE742102C33FAA6009DEE99 /* ListViewController.swift */,
 				6BE742172C34010C009DEE99 /* ListTableViewCell.swift */,
+				6BE7421E2C340B6F009DEE99 /* ListTableHeaderView.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -141,8 +149,17 @@
 			isa = PBXGroup;
 			children = (
 				6BE742152C33FBD9009DEE99 /* Identifier+Extension.swift */,
+				6BE7421C2C3409B4009DEE99 /* UILabel+Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		6BE7421B2C34099D009DEE99 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				6BE742192C34089A009DEE99 /* DesignOfFont.swift */,
+			);
+			path = Design;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,12 +241,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BE7421D2C3409B4009DEE99 /* UILabel+Extension.swift in Sources */,
 				6BE742162C33FBD9009DEE99 /* Identifier+Extension.swift in Sources */,
 				6BE741EF2C33DDAE009DEE99 /* BaseViewController.swift in Sources */,
 				6BE742082C33F79B009DEE99 /* BaseCollectionViewCell.swift in Sources */,
+				6BE7421A2C34089A009DEE99 /* DesignOfFont.swift in Sources */,
 				6BE741EB2C33DDAE009DEE99 /* AppDelegate.swift in Sources */,
 				6BE7420A2C33F7C1009DEE99 /* BaseTableViewCell.swift in Sources */,
 				6BE742182C34010C009DEE99 /* ListTableViewCell.swift in Sources */,
+				6BE7421F2C340B6F009DEE99 /* ListTableHeaderView.swift in Sources */,
 				6BE7420E2C33F854009DEE99 /* DataBaseManager.swift in Sources */,
 				6BE741ED2C33DDAE009DEE99 /* SceneDelegate.swift in Sources */,
 				6BE742112C33FAA6009DEE99 /* ListViewController.swift in Sources */,
