@@ -18,12 +18,10 @@ final class ListViewController: BaseViewController {
     }
     
     override func configureNavigationBar() {
-        
+    
         let moreItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"),
-                                       style: .plain,
-                                       target: self,
-                                       action: #selector(moreButtonClicked))
-        
+                                menu: configureMenu())
+
         navigationItem.rightBarButtonItem = moreItem
     }
     
@@ -56,10 +54,26 @@ final class ListViewController: BaseViewController {
 //MARK: - ListVC private, @objc
 extension ListViewController {
     
-    @objc private func moreButtonClicked() {
+    private func configureMenu() -> UIMenu {
         
+        let sortedByTitle = UIAction(title: "제목 순으로 보기") { [weak self] _ in
+        }
+        
+        let sortedByDate = UIAction(title: "마감일 순으로 보기") { [weak self] _ in
+        }
+        
+        let sortedByimportant = UIAction(title: "우선순위 순으로 보기") { [weak self] _ in
+        }
+        
+        let items = [
+           sortedByTitle,
+           sortedByDate,
+           sortedByimportant
+        ]
+        
+        return UIMenu(children: items)
     }
-
+  
 }
 
 //MARK: - TableView Delegate, DataSource
@@ -67,7 +81,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return DataBaseManager.shared.read(Todo.self).count
     }
     
     func tableView(_ tableView: UITableView,
@@ -77,8 +91,22 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
                                                        for: indexPath) as? ListTableViewCell else {
             return ListTableViewCell()
         }
+        let data = DataBaseManager.shared.read(Todo.self)[indexPath.row]
+        cell.updateContent(data: data)
         
         return cell
+    }
+   
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let delete = UIContextualAction(style: .normal,
+                                        title: "삭제") { action, view, completionHandler in
+            let todo = DataBaseManager.shared.read(Todo.self)[indexPath.row]
+            DataBaseManager.shared.delete(todo)
+            tableView.reloadData()
+        }
+        
+        return UISwipeActionsConfiguration(actions: [delete])
     }
     
 }
