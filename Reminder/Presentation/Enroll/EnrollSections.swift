@@ -8,7 +8,7 @@
 import Foundation
 
 enum EnrollSections: Int, CaseIterable {
-    case title
+    case main
     case deadLine
     case tag
     case important
@@ -16,8 +16,8 @@ enum EnrollSections: Int, CaseIterable {
     
     var text: String {
         switch self {
-        case .title:
-            return "제목"
+        case .main:
+            return "주요 내용"
         case .deadLine:
             return "마감일"
         case .tag:

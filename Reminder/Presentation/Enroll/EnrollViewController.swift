@@ -97,7 +97,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                    numberOfRowsInSection section: Int) -> Int {
         
         switch EnrollSections(rawValue: section) {
-        case .title:
+        case .main:
             return 2
         default:
             return 1
@@ -106,7 +106,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch EnrollSections(rawValue: indexPath.section) {
-        case .title:
+        case .main:
             if indexPath.row == 0 {
                 return 44
             }
@@ -126,7 +126,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch EnrollSections(rawValue: indexPath.section) {
-        case .title:
+        case .main:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleAndMemoTableViewCell.identifier,
                                                            for: indexPath) as? TitleAndMemoTableViewCell,
                   let type = EnrollSections.Main(rawValue: indexPath.row) else {

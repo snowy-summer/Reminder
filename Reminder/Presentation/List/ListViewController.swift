@@ -35,7 +35,7 @@ final class ListViewController: BaseViewController {
         listTableView.dataSource = self
         listTableView.register(ListTableViewCell.self,
                                forCellReuseIdentifier: ListTableViewCell.identifier)
-        let headerView = ListTableHeaderView(frame: CGRect(x: 0,
+        let headerView = TitleHeaderView(frame: CGRect(x: 0,
                                                            y: 0,
                                                            width: listTableView.frame.width,
                                                            height: 44))
@@ -45,7 +45,8 @@ final class ListViewController: BaseViewController {
     override func configureLayout() {
         
         listTableView.snp.makeConstraints { make in
-            make.directionalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.verticalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.directionalHorizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
     }
     
@@ -56,13 +57,13 @@ extension ListViewController {
     
     private func configureMenu() -> UIMenu {
         
-        let sortedByTitle = UIAction(title: "제목 순으로 보기") { [weak self] _ in
+        let sortedByTitle = UIAction(title: "제목 순으로 보기") { _ in
         }
         
-        let sortedByDate = UIAction(title: "마감일 순으로 보기") { [weak self] _ in
+        let sortedByDate = UIAction(title: "마감일 순으로 보기") { _ in
         }
         
-        let sortedByimportant = UIAction(title: "우선순위 순으로 보기") { [weak self] _ in
+        let sortedByimportant = UIAction(title: "우선순위 순으로 보기") { _ in
         }
         
         let items = [

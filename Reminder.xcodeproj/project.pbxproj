@@ -23,7 +23,7 @@
 		6BE742182C34010C009DEE99 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742172C34010C009DEE99 /* ListTableViewCell.swift */; };
 		6BE7421A2C34089A009DEE99 /* DesignOfFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742192C34089A009DEE99 /* DesignOfFont.swift */; };
 		6BE7421D2C3409B4009DEE99 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7421C2C3409B4009DEE99 /* UILabel+Extension.swift */; };
-		6BE7421F2C340B6F009DEE99 /* ListTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7421E2C340B6F009DEE99 /* ListTableHeaderView.swift */; };
+		6BE7421F2C340B6F009DEE99 /* TitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7421E2C340B6F009DEE99 /* TitleHeaderView.swift */; };
 		6BE742212C341B6E009DEE99 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742202C341B6E009DEE99 /* Todo.swift */; };
 		6BE742242C342090009DEE99 /* EnrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742232C342090009DEE99 /* EnrollViewController.swift */; };
 		6BE742262C34237A009DEE99 /* TitleAndMemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742252C34237A009DEE99 /* TitleAndMemoTableViewCell.swift */; };
@@ -32,6 +32,11 @@
 		6BE7422C2C34310A009DEE99 /* UITextView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7422B2C34310A009DEE99 /* UITextView+Extension.swift */; };
 		6BE7422F2C343ED8009DEE99 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7422E2C343ED8009DEE99 /* HomeViewController.swift */; };
 		6BE742312C344C2B009DEE99 /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742302C344C2B009DEE99 /* NotificationName+Extension.swift */; };
+		6BE742332C34CC08009DEE99 /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742322C34CC08009DEE99 /* HomeCollectionViewCell.swift */; };
+		6BE742382C34EB46009DEE99 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742372C34EB46009DEE99 /* UIButton+Extension.swift */; };
+		6BE7423A2C34ED3F009DEE99 /* DesignOfToolBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742392C34ED3F009DEE99 /* DesignOfToolBarButton.swift */; };
+		6BE7423C2C34EE75009DEE99 /* HomeCollectionViewCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7423B2C34EE75009DEE99 /* HomeCollectionViewCellType.swift */; };
+		6BE7423E2C3504B7009DEE99 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7423D2C3504B7009DEE99 /* HomeHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +56,7 @@
 		6BE742172C34010C009DEE99 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		6BE742192C34089A009DEE99 /* DesignOfFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignOfFont.swift; sourceTree = "<group>"; };
 		6BE7421C2C3409B4009DEE99 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
-		6BE7421E2C340B6F009DEE99 /* ListTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableHeaderView.swift; sourceTree = "<group>"; };
+		6BE7421E2C340B6F009DEE99 /* TitleHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleHeaderView.swift; sourceTree = "<group>"; };
 		6BE742202C341B6E009DEE99 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		6BE742232C342090009DEE99 /* EnrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrollViewController.swift; sourceTree = "<group>"; };
 		6BE742252C34237A009DEE99 /* TitleAndMemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleAndMemoTableViewCell.swift; sourceTree = "<group>"; };
@@ -60,6 +65,11 @@
 		6BE7422B2C34310A009DEE99 /* UITextView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Extension.swift"; sourceTree = "<group>"; };
 		6BE7422E2C343ED8009DEE99 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		6BE742302C344C2B009DEE99 /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
+		6BE742322C34CC08009DEE99 /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
+		6BE742372C34EB46009DEE99 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		6BE742392C34ED3F009DEE99 /* DesignOfToolBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignOfToolBarButton.swift; sourceTree = "<group>"; };
+		6BE7423B2C34EE75009DEE99 /* HomeCollectionViewCellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCellType.swift; sourceTree = "<group>"; };
+		6BE7423D2C3504B7009DEE99 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,7 +169,7 @@
 			children = (
 				6BE742102C33FAA6009DEE99 /* ListViewController.swift */,
 				6BE742172C34010C009DEE99 /* ListTableViewCell.swift */,
-				6BE7421E2C340B6F009DEE99 /* ListTableHeaderView.swift */,
+				6BE7421E2C340B6F009DEE99 /* TitleHeaderView.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -169,6 +179,7 @@
 			children = (
 				6BE742152C33FBD9009DEE99 /* Identifier+Extension.swift */,
 				6BE7421C2C3409B4009DEE99 /* UILabel+Extension.swift */,
+				6BE742372C34EB46009DEE99 /* UIButton+Extension.swift */,
 				6BE7422B2C34310A009DEE99 /* UITextView+Extension.swift */,
 				6BE742302C344C2B009DEE99 /* NotificationName+Extension.swift */,
 			);
@@ -179,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				6BE742192C34089A009DEE99 /* DesignOfFont.swift */,
+				6BE742392C34ED3F009DEE99 /* DesignOfToolBarButton.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
@@ -198,6 +210,9 @@
 			isa = PBXGroup;
 			children = (
 				6BE7422E2C343ED8009DEE99 /* HomeViewController.swift */,
+				6BE742322C34CC08009DEE99 /* HomeCollectionViewCell.swift */,
+				6BE7423B2C34EE75009DEE99 /* HomeCollectionViewCellType.swift */,
+				6BE7423D2C3504B7009DEE99 /* HomeHeaderView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -283,9 +298,12 @@
 			files = (
 				6BE742282C34240F009DEE99 /* EnrollExtraTableViewCell.swift in Sources */,
 				6BE7421D2C3409B4009DEE99 /* UILabel+Extension.swift in Sources */,
+				6BE7423C2C34EE75009DEE99 /* HomeCollectionViewCellType.swift in Sources */,
 				6BE7422F2C343ED8009DEE99 /* HomeViewController.swift in Sources */,
+				6BE742382C34EB46009DEE99 /* UIButton+Extension.swift in Sources */,
 				6BE742162C33FBD9009DEE99 /* Identifier+Extension.swift in Sources */,
 				6BE741EF2C33DDAE009DEE99 /* BaseViewController.swift in Sources */,
+				6BE7423A2C34ED3F009DEE99 /* DesignOfToolBarButton.swift in Sources */,
 				6BE742262C34237A009DEE99 /* TitleAndMemoTableViewCell.swift in Sources */,
 				6BE7422C2C34310A009DEE99 /* UITextView+Extension.swift in Sources */,
 				6BE742082C33F79B009DEE99 /* BaseCollectionViewCell.swift in Sources */,
@@ -294,11 +312,13 @@
 				6BE742312C344C2B009DEE99 /* NotificationName+Extension.swift in Sources */,
 				6BE7420A2C33F7C1009DEE99 /* BaseTableViewCell.swift in Sources */,
 				6BE742182C34010C009DEE99 /* ListTableViewCell.swift in Sources */,
+				6BE7423E2C3504B7009DEE99 /* HomeHeaderView.swift in Sources */,
 				6BE7422A2C3425BD009DEE99 /* EnrollSections.swift in Sources */,
-				6BE7421F2C340B6F009DEE99 /* ListTableHeaderView.swift in Sources */,
+				6BE7421F2C340B6F009DEE99 /* TitleHeaderView.swift in Sources */,
 				6BE7420E2C33F854009DEE99 /* DataBaseManager.swift in Sources */,
 				6BE741ED2C33DDAE009DEE99 /* SceneDelegate.swift in Sources */,
 				6BE742212C341B6E009DEE99 /* Todo.swift in Sources */,
+				6BE742332C34CC08009DEE99 /* HomeCollectionViewCell.swift in Sources */,
 				6BE742242C342090009DEE99 /* EnrollViewController.swift in Sources */,
 				6BE742112C33FAA6009DEE99 /* ListViewController.swift in Sources */,
 			);
@@ -451,7 +471,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -483,7 +503,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

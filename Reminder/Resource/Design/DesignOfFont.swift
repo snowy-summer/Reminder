@@ -8,6 +8,7 @@
 import UIKit
 
 enum DesignOfFont {
+    case todoCountLabel
     case enrollPlaceHolder
     case enrollCellTitle
     case listHeaderTitle
@@ -18,25 +19,37 @@ enum DesignOfFont {
     
     var font: UIFont {
         switch self {
+        case .todoCountLabel:
+            return .systemFont(ofSize: 24,
+                               weight: .bold)
         case.enrollPlaceHolder:
-            return .systemFont(ofSize: 17, weight: .semibold)
+            return .systemFont(ofSize: 17,
+                               weight: .semibold)
         case.enrollCellTitle:
-            return .systemFont(ofSize: 17, weight: .semibold)
+            return .systemFont(ofSize: 17,
+                               weight: .semibold)
         case .listHeaderTitle:
-            return .systemFont(ofSize: 32, weight: .semibold)
+            return .systemFont(ofSize: 32,
+                               weight: .semibold)
         case .listTitle:
-            return .systemFont(ofSize: 17, weight: .semibold)
+            return .systemFont(ofSize: 17,
+                               weight: .semibold)
         case .listSubTitle:
-            return .systemFont(ofSize: 14, weight: .semibold)
+            return .systemFont(ofSize: 14,
+                               weight: .semibold)
         case .listDateLabel:
-            return .systemFont(ofSize: 12, weight: .semibold)
+            return .systemFont(ofSize: 12,
+                               weight: .semibold)
         case .listTag:
-            return .systemFont(ofSize: 12, weight: .semibold)
+            return .systemFont(ofSize: 12,
+                               weight: .semibold)
         }
     }
     
     var color: UIColor {
         switch self {
+        case .todoCountLabel:
+            return .baseFont
         case .enrollPlaceHolder:
             return .lightGray
         case .enrollCellTitle:

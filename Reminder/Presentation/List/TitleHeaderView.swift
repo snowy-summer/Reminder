@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class ListTableHeaderView: UIView {
+final class TitleHeaderView: UIView {
     
     private let titleLabel = UILabel()
     
@@ -33,5 +33,10 @@ final class ListTableHeaderView: UIView {
             make.leading.equalTo(self)
             make.verticalEdges.equalTo(self)
         }
+    }
+    
+    func updateContent(title: String) {
+        
+        titleLabel.text = title
     }
 }
