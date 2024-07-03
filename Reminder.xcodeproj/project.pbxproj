@@ -37,6 +37,12 @@
 		6BE7423A2C34ED3F009DEE99 /* DesignOfToolBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742392C34ED3F009DEE99 /* DesignOfToolBarButton.swift */; };
 		6BE7423C2C34EE75009DEE99 /* HomeCollectionViewCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7423B2C34EE75009DEE99 /* HomeCollectionViewCellType.swift */; };
 		6BE7423E2C3504B7009DEE99 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7423D2C3504B7009DEE99 /* HomeHeaderView.swift */; };
+		6BE742402C352162009DEE99 /* DeadLineEnrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7423F2C352162009DEE99 /* DeadLineEnrollViewController.swift */; };
+		6BE742422C35216C009DEE99 /* TagEnrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742412C35216C009DEE99 /* TagEnrollViewController.swift */; };
+		6BE742442C35217F009DEE99 /* PriorityEnrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742432C35217F009DEE99 /* PriorityEnrollViewController.swift */; };
+		6BE742462C3532ED009DEE99 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742452C3532ED009DEE99 /* UITextField+Extension.swift */; };
+		6BE742482C353A11009DEE99 /* PriorityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE742472C353A11009DEE99 /* PriorityType.swift */; };
+		6BE7424B2C3549D6009DEE99 /* DateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7424A2C3549D6009DEE99 /* DateManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +76,12 @@
 		6BE742392C34ED3F009DEE99 /* DesignOfToolBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignOfToolBarButton.swift; sourceTree = "<group>"; };
 		6BE7423B2C34EE75009DEE99 /* HomeCollectionViewCellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCellType.swift; sourceTree = "<group>"; };
 		6BE7423D2C3504B7009DEE99 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
+		6BE7423F2C352162009DEE99 /* DeadLineEnrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadLineEnrollViewController.swift; sourceTree = "<group>"; };
+		6BE742412C35216C009DEE99 /* TagEnrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEnrollViewController.swift; sourceTree = "<group>"; };
+		6BE742432C35217F009DEE99 /* PriorityEnrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityEnrollViewController.swift; sourceTree = "<group>"; };
+		6BE742452C3532ED009DEE99 /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
+		6BE742472C353A11009DEE99 /* PriorityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityType.swift; sourceTree = "<group>"; };
+		6BE7424A2C3549D6009DEE99 /* DateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +121,7 @@
 				6BE742062C33F78B009DEE99 /* Base */,
 				6BE742122C33FAAE009DEE99 /* Presentation */,
 				6BE7420F2C33FA90009DEE99 /* DataBase */,
+				6BE742492C3549B0009DEE99 /* Utils */,
 				6BE742142C33FBBF009DEE99 /* Extension */,
 				6BE7420C2C33F821009DEE99 /* Resource */,
 				6BE741F82C33DDB0009DEE99 /* Info.plist */,
@@ -119,9 +132,8 @@
 		6BE742062C33F78B009DEE99 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				6BE741EE2C33DDAE009DEE99 /* BaseViewController.swift */,
-				6BE742072C33F79B009DEE99 /* BaseCollectionViewCell.swift */,
-				6BE742092C33F7C1009DEE99 /* BaseTableViewCell.swift */,
+				6BE742552C3552E7009DEE99 /* ViewController */,
+				6BE742562C3552F1009DEE99 /* Cell */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -149,7 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				6BE7420D2C33F854009DEE99 /* DataBaseManager.swift */,
-				6BE742202C341B6E009DEE99 /* Todo.swift */,
+				6BE742522C3552AA009DEE99 /* DataModel */,
 			);
 			path = DataBase;
 			sourceTree = "<group>";
@@ -167,9 +179,8 @@
 		6BE742132C33FB49009DEE99 /* List */ = {
 			isa = PBXGroup;
 			children = (
-				6BE742102C33FAA6009DEE99 /* ListViewController.swift */,
-				6BE742172C34010C009DEE99 /* ListTableViewCell.swift */,
-				6BE7421E2C340B6F009DEE99 /* TitleHeaderView.swift */,
+				6BE742532C3552BE009DEE99 /* ViewController */,
+				6BE742542C3552C8009DEE99 /* Cell */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -182,6 +193,7 @@
 				6BE742372C34EB46009DEE99 /* UIButton+Extension.swift */,
 				6BE7422B2C34310A009DEE99 /* UITextView+Extension.swift */,
 				6BE742302C344C2B009DEE99 /* NotificationName+Extension.swift */,
+				6BE742452C3532ED009DEE99 /* UITextField+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -198,10 +210,9 @@
 		6BE742222C342075009DEE99 /* Enroll */ = {
 			isa = PBXGroup;
 			children = (
-				6BE742232C342090009DEE99 /* EnrollViewController.swift */,
-				6BE742252C34237A009DEE99 /* TitleAndMemoTableViewCell.swift */,
-				6BE742272C34240F009DEE99 /* EnrollExtraTableViewCell.swift */,
-				6BE742292C3425BD009DEE99 /* EnrollSections.swift */,
+				6BE7424D2C355256009DEE99 /* ViewController */,
+				6BE7424E2C355269009DEE99 /* Cell */,
+				6BE7424C2C35523E009DEE99 /* Type */,
 			);
 			path = Enroll;
 			sourceTree = "<group>";
@@ -209,12 +220,115 @@
 		6BE7422D2C343EC5009DEE99 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				6BE7422E2C343ED8009DEE99 /* HomeViewController.swift */,
-				6BE742322C34CC08009DEE99 /* HomeCollectionViewCell.swift */,
-				6BE7423B2C34EE75009DEE99 /* HomeCollectionViewCellType.swift */,
-				6BE7423D2C3504B7009DEE99 /* HomeHeaderView.swift */,
+				6BE742512C355288009DEE99 /* ViewController */,
+				6BE742502C355283009DEE99 /* Type */,
+				6BE7424F2C35527D009DEE99 /* Cell */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		6BE742492C3549B0009DEE99 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				6BE7424A2C3549D6009DEE99 /* DateManager.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		6BE7424C2C35523E009DEE99 /* Type */ = {
+			isa = PBXGroup;
+			children = (
+				6BE742292C3425BD009DEE99 /* EnrollSections.swift */,
+				6BE742472C353A11009DEE99 /* PriorityType.swift */,
+			);
+			path = Type;
+			sourceTree = "<group>";
+		};
+		6BE7424D2C355256009DEE99 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6BE742252C34237A009DEE99 /* TitleAndMemoTableViewCell.swift */,
+				6BE7423F2C352162009DEE99 /* DeadLineEnrollViewController.swift */,
+				6BE742412C35216C009DEE99 /* TagEnrollViewController.swift */,
+				6BE742432C35217F009DEE99 /* PriorityEnrollViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		6BE7424E2C355269009DEE99 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				6BE742232C342090009DEE99 /* EnrollViewController.swift */,
+				6BE742272C34240F009DEE99 /* EnrollExtraTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		6BE7424F2C35527D009DEE99 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				6BE742322C34CC08009DEE99 /* HomeCollectionViewCell.swift */,
+				6BE7423D2C3504B7009DEE99 /* HomeHeaderView.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		6BE742502C355283009DEE99 /* Type */ = {
+			isa = PBXGroup;
+			children = (
+				6BE7423B2C34EE75009DEE99 /* HomeCollectionViewCellType.swift */,
+			);
+			path = Type;
+			sourceTree = "<group>";
+		};
+		6BE742512C355288009DEE99 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6BE7422E2C343ED8009DEE99 /* HomeViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		6BE742522C3552AA009DEE99 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				6BE742202C341B6E009DEE99 /* Todo.swift */,
+			);
+			path = DataModel;
+			sourceTree = "<group>";
+		};
+		6BE742532C3552BE009DEE99 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6BE742102C33FAA6009DEE99 /* ListViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		6BE742542C3552C8009DEE99 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				6BE7421E2C340B6F009DEE99 /* TitleHeaderView.swift */,
+				6BE742172C34010C009DEE99 /* ListTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		6BE742552C3552E7009DEE99 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6BE741EE2C33DDAE009DEE99 /* BaseViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		6BE742562C3552F1009DEE99 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				6BE742072C33F79B009DEE99 /* BaseCollectionViewCell.swift */,
+				6BE742092C33F7C1009DEE99 /* BaseTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,19 +413,25 @@
 				6BE742282C34240F009DEE99 /* EnrollExtraTableViewCell.swift in Sources */,
 				6BE7421D2C3409B4009DEE99 /* UILabel+Extension.swift in Sources */,
 				6BE7423C2C34EE75009DEE99 /* HomeCollectionViewCellType.swift in Sources */,
+				6BE742442C35217F009DEE99 /* PriorityEnrollViewController.swift in Sources */,
 				6BE7422F2C343ED8009DEE99 /* HomeViewController.swift in Sources */,
 				6BE742382C34EB46009DEE99 /* UIButton+Extension.swift in Sources */,
 				6BE742162C33FBD9009DEE99 /* Identifier+Extension.swift in Sources */,
 				6BE741EF2C33DDAE009DEE99 /* BaseViewController.swift in Sources */,
 				6BE7423A2C34ED3F009DEE99 /* DesignOfToolBarButton.swift in Sources */,
+				6BE742402C352162009DEE99 /* DeadLineEnrollViewController.swift in Sources */,
 				6BE742262C34237A009DEE99 /* TitleAndMemoTableViewCell.swift in Sources */,
+				6BE742482C353A11009DEE99 /* PriorityType.swift in Sources */,
+				6BE742462C3532ED009DEE99 /* UITextField+Extension.swift in Sources */,
 				6BE7422C2C34310A009DEE99 /* UITextView+Extension.swift in Sources */,
 				6BE742082C33F79B009DEE99 /* BaseCollectionViewCell.swift in Sources */,
 				6BE7421A2C34089A009DEE99 /* DesignOfFont.swift in Sources */,
 				6BE741EB2C33DDAE009DEE99 /* AppDelegate.swift in Sources */,
 				6BE742312C344C2B009DEE99 /* NotificationName+Extension.swift in Sources */,
+				6BE742422C35216C009DEE99 /* TagEnrollViewController.swift in Sources */,
 				6BE7420A2C33F7C1009DEE99 /* BaseTableViewCell.swift in Sources */,
 				6BE742182C34010C009DEE99 /* ListTableViewCell.swift in Sources */,
+				6BE7424B2C3549D6009DEE99 /* DateManager.swift in Sources */,
 				6BE7423E2C3504B7009DEE99 /* HomeHeaderView.swift in Sources */,
 				6BE7422A2C3425BD009DEE99 /* EnrollSections.swift in Sources */,
 				6BE7421F2C340B6F009DEE99 /* TitleHeaderView.swift in Sources */,

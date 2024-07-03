@@ -16,9 +16,19 @@ class BaseViewController: UIViewController {
         configureHierarchy()
         configureUI()
         configureLayout()
+        configureGestureAndButtonAction()
     }
      
-    func configureNavigationBar() { }
+    func configureNavigationBar() { 
+        
+        let popItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"),
+                                      style: .plain,
+                                      target: self,
+                                      action: #selector(popVC))
+        
+        navigationItem.leftBarButtonItem = popItem
+    }
+    
     func configureHierarchy() { }
     
     func configureUI() {
@@ -46,6 +56,10 @@ class BaseViewController: UIViewController {
         alert.addAction(cancel)
         
         present(alert, animated: true)
+    }
+    
+    @objc func popVC() {
+        navigationController?.popViewController(animated: true)
     }
      
 }

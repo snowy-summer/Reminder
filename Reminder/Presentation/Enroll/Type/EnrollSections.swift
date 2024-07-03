@@ -11,7 +11,7 @@ enum EnrollSections: Int, CaseIterable {
     case main
     case deadLine
     case tag
-    case important
+    case priority
     case addImage
     
     var text: String {
@@ -22,7 +22,7 @@ enum EnrollSections: Int, CaseIterable {
             return "마감일"
         case .tag:
             return "태그"
-        case .important:
+        case .priority:
             return "우선 순위"
         case .addImage:
             return "이미지 추가"

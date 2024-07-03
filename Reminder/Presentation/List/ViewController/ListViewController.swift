@@ -18,6 +18,7 @@ final class ListViewController: BaseViewController {
     }
     
     override func configureNavigationBar() {
+        super.configureNavigationBar()
     
         let moreItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"),
                                 menu: configureMenu())
@@ -63,13 +64,13 @@ extension ListViewController {
         let sortedByDate = UIAction(title: "마감일 순으로 보기") { _ in
         }
         
-        let sortedByimportant = UIAction(title: "우선순위 순으로 보기") { _ in
+        let sortedByPriority = UIAction(title: "우선순위 순으로 보기") { _ in
         }
         
         let items = [
            sortedByTitle,
            sortedByDate,
-           sortedByimportant
+           sortedByPriority
         ]
         
         return UIMenu(children: items)

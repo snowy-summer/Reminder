@@ -104,13 +104,13 @@ final class HomeViewController: BaseViewController {
         let sortedByDate = UIAction(title: "마감일 순으로 보기") { _ in
         }
         
-        let sortedByimportant = UIAction(title: "우선순위 순으로 보기") { _ in
+        let sortedByPriority = UIAction(title: "우선순위 순으로 보기") { _ in
         }
         
         let items = [
             sortedByTitle,
             sortedByDate,
-            sortedByimportant
+            sortedByPriority
         ]
         
         return UIMenu(children: items)
@@ -119,7 +119,7 @@ final class HomeViewController: BaseViewController {
     private func configureNotification() {
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(pushVC),
+                                               selector: #selector(pushListViewController),
                                                name: .pushNotification,
                                                object: nil)
     }
@@ -146,23 +146,18 @@ final class HomeViewController: BaseViewController {
         return layout
     }
     
-    @objc private func modalVC() {
-        
-        let nv = UINavigationController(rootViewController: EnrollViewController())
-        nv.modalPresentationStyle = .fullScreen
-        
-        present(nv,
-                animated: true)
-    }
-    
-    @objc private func pushVC() {
+    @objc private func pushListViewController() {
         
         navigationController?.pushViewController(ListViewController(), animated: true)
     }
     
     @objc private func addTodo() {
         
-        navigationController?.pushViewController(ListViewController(), animated: true)
+        let nv = UINavigationController(rootViewController: EnrollViewController())
+        nv.modalPresentationStyle = .fullScreen
+        
+        present(nv,
+                animated: true)
     }
     
     @objc private func addList() {

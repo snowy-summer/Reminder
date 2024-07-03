@@ -14,7 +14,6 @@ enum HomeCollectionViewCellType:Int, CaseIterable {
     case pin
     case done
     
-    
     var title: String {
         switch self {
         case .today:
@@ -60,5 +59,37 @@ enum HomeCollectionViewCellType:Int, CaseIterable {
         }
     }
     
+    var dataCount: Int {
+        switch self {
+        case .today:
+            let results = DataBaseManager.shared.read(Todo.self)
+            return results.filter {
+                $0.deadLine == Date()
+            }.count
+            
+        case .will:
+            
+            let results = DataBaseManager.shared.read(Todo.self)
+            return 1
+            
+        case .all:
+            let results = DataBaseManager.shared.read(Todo.self)
+            return results.count
+            
+        case .pin:
+            let results = DataBaseManager.shared.read(Todo.self)
+            
+            return results.filter {
+                $0.isPined == true
+            }.count
+            
+        case .done:
+            let results = DataBaseManager.shared.read(Todo.self)
+            
+            return results.filter {
+                $0.isDone == true
+            }.count
+        }
+    }
     
 }

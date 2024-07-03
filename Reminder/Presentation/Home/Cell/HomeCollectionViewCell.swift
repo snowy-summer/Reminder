@@ -17,7 +17,6 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
     }
     
     override func configureHierarchy() {
@@ -67,7 +66,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         iconImage.image = image
         
         titleLabel.text = type.title
-        countLabel.text = "1000"
+        countLabel.text = String(type.dataCount)
         
     }
 }

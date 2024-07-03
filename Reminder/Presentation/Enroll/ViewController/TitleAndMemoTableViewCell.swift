@@ -10,14 +10,14 @@ import SnapKit
 
 protocol TitleAndMemoTableViewCellDelegate: AnyObject {
     
-    func changeSaveButtonEnabled(text: String, placeHolder: String)
+    func changeSaveButtonEnabled(text: String, type: EnrollSections.Main)
 }
 
 final class TitleAndMemoTableViewCell: BaseTableViewCell {
     
     private(set) var contentTextView = UITextView()
-    private(set) var placeHolder: String?
     weak var delegate: TitleAndMemoTableViewCellDelegate?
+    var type: EnrollSections.Main?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -48,19 +48,25 @@ final class TitleAndMemoTableViewCell: BaseTableViewCell {
         }
     }
     
-    func updateContent(type: EnrollSections.Main) {
+    func updateContent(text: String?) {
         
-        contentTextView.text = type.text
-        placeHolder = type.text
-        
+        guard let type = type else { return }
+        if let text = text,
+           !text.isEmpty {
+            
+            contentTextView.text = text
+        } else {
+            contentTextView.text = type.text
+        }
     }
+    
 }
 
 extension TitleAndMemoTableViewCell: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         
-        if textView.text == placeHolder {
+        if textView.text == type?.text {
             contentTextView.text = .none
         }
         
@@ -70,14 +76,17 @@ extension TitleAndMemoTableViewCell: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         
         let text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        delegate?.changeSaveButtonEnabled(text: text,
-                                          placeHolder: placeHolder!)
+        
+        if let type = type {
+            delegate?.changeSaveButtonEnabled(text: text,
+                                              type: type)
+        }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            contentTextView.text = placeHolder
+            contentTextView.text = type?.text
             contentTextView.textColor = .lightGray
         }
         
