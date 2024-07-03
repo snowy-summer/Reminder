@@ -22,4 +22,15 @@ enum PriorityType: Int, CaseIterable {
             return "하"
         }
     }
+    
+    var listTitle: String {
+        switch self {
+        case .high:
+            return "!!!"
+        case .middle:
+            return "!!"
+        case .low:
+            return "!"
+        }
+    }
 }

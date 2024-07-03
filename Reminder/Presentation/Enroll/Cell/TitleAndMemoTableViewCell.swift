@@ -30,6 +30,8 @@ final class TitleAndMemoTableViewCell: BaseTableViewCell {
     }
     
     override func configureUI() {
+        super.configureUI()
+        
         contentTextView.textContainerInset = UIEdgeInsets(top: 8.0,
                                                           left: 8.0,
                                                           bottom: 8.0,

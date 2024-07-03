@@ -12,6 +12,7 @@ enum DesignOfFont {
     case enrollPlaceHolder
     case enrollCellTitle
     case listHeaderTitle
+    case listPriority
     case listTitle
     case listSubTitle
     case listDateLabel
@@ -30,6 +31,9 @@ enum DesignOfFont {
                                weight: .semibold)
         case .listHeaderTitle:
             return .systemFont(ofSize: 32,
+                               weight: .semibold)
+        case .listPriority:
+            return .systemFont(ofSize: 17,
                                weight: .semibold)
         case .listTitle:
             return .systemFont(ofSize: 17,
@@ -55,6 +59,8 @@ enum DesignOfFont {
         case .enrollCellTitle:
             return .baseFont
         case .listHeaderTitle:
+            return .tintColor
+        case .listPriority:
             return .tintColor
         case .listTitle:
             return .baseFont

@@ -72,6 +72,7 @@ final class EnrollViewController: BaseViewController {
 extension EnrollViewController {
     
     @objc private func cancelButtonAction() {
+        
         dismiss(animated: true)
     }
     
@@ -80,6 +81,7 @@ extension EnrollViewController {
         DataBaseManager.shared.add(model)
         
         self.dismiss(animated: true) {
+            NotificationCenter.default.post(name: .updateNotification, object: nil)
             NotificationCenter.default.post(name: .pushNotification, object: nil)
         }
     }
@@ -270,11 +272,11 @@ extension EnrollViewController: TitleAndMemoTableViewCellDelegate {
             switch type {
             case .title:
                 model.title = text
+                saveItem.isEnabled = true
             case .memo:
                 model.subTitle = text
             }
             
-            saveItem.isEnabled = true
         } else {
             saveItem.isEnabled = false
         }

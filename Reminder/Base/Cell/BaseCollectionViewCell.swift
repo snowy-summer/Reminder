@@ -15,6 +15,7 @@ class BaseCollectionViewCell: UICollectionViewCell {
         configureHierarchy()
         configureUI()
         configureLayout()
+        configureGestureAndButtonAction()
     }
     
     @available(*, unavailable)
@@ -25,4 +26,5 @@ class BaseCollectionViewCell: UICollectionViewCell {
     func configureHierarchy() { }
     func configureUI() { }
     func configureLayout() { }
+    func configureGestureAndButtonAction() { }
 }

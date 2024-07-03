@@ -27,6 +27,7 @@ final class EnrollExtraTableViewCell: BaseTableViewCell {
     }
     
     override func configureUI() {
+        super.configureUI()
         
         titleLabel.fontType(what: .enrollCellTitle)
         

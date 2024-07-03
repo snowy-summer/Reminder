@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 enum HomeCollectionViewCellType:Int, CaseIterable {
     case today
@@ -59,32 +60,66 @@ enum HomeCollectionViewCellType:Int, CaseIterable {
         }
     }
     
-    var dataCount: Int {
+    var data: Results<Todo> {
+        let results = DataBaseManager.shared.read(Todo.self)
+        
         switch self {
         case .today:
-            let results = DataBaseManager.shared.read(Todo.self)
+           
+            return results.where {
+                $0.deadLine == Date()
+            }
+        case .will:
+            
+            let futureResults = results.where {
+                $0.deadLine != nil && $0.deadLine > Date.now
+            }
+            
+            return futureResults
+            
+        case .all:
+            return results
+            
+        case .pin:
+            return results.where {
+                $0.isPined == true
+            }
+            
+        case .done:
+            return results.where {
+                $0.isDone == true
+            }
+        }
+    }
+    
+    var dataCount: Int {
+        let results = DataBaseManager.shared.read(Todo.self)
+        
+        switch self {
+        case .today:
+            
             return results.filter {
                 $0.deadLine == Date()
             }.count
             
         case .will:
             
-            let results = DataBaseManager.shared.read(Todo.self)
-            return 1
+            let futureResults = results.filter {
+                $0.deadLine != nil && $0.deadLine! > Date.now
+            }
+
+            return futureResults.count
             
         case .all:
-            let results = DataBaseManager.shared.read(Todo.self)
             return results.count
             
         case .pin:
-            let results = DataBaseManager.shared.read(Todo.self)
             
             return results.filter {
                 $0.isPined == true
             }.count
             
         case .done:
-            let results = DataBaseManager.shared.read(Todo.self)
             
             return results.filter {
                 $0.isDone == true

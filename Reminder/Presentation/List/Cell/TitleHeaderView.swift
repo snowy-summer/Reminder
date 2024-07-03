@@ -12,10 +12,11 @@ final class TitleHeaderView: UIView {
     
     private let titleLabel = UILabel()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    init(type: HomeCollectionViewCellType) {
+        super.init(frame: .zero)
         configureTitle()
+        titleLabel.text = type.title
+        titleLabel.textColor = type.iconTintColor
     }
     
     required init?(coder: NSCoder) {
@@ -26,7 +27,6 @@ final class TitleHeaderView: UIView {
         
         addSubview(titleLabel)
         
-        titleLabel.text = "전체"
         titleLabel.fontType(what: .listHeaderTitle)
         
         titleLabel.snp.makeConstraints { make in

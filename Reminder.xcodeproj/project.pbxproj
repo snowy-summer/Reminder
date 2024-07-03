@@ -247,7 +247,7 @@
 		6BE7424D2C355256009DEE99 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				6BE742252C34237A009DEE99 /* TitleAndMemoTableViewCell.swift */,
+				6BE742232C342090009DEE99 /* EnrollViewController.swift */,
 				6BE7423F2C352162009DEE99 /* DeadLineEnrollViewController.swift */,
 				6BE742412C35216C009DEE99 /* TagEnrollViewController.swift */,
 				6BE742432C35217F009DEE99 /* PriorityEnrollViewController.swift */,
@@ -258,7 +258,7 @@
 		6BE7424E2C355269009DEE99 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				6BE742232C342090009DEE99 /* EnrollViewController.swift */,
+				6BE742252C34237A009DEE99 /* TitleAndMemoTableViewCell.swift */,
 				6BE742272C34240F009DEE99 /* EnrollExtraTableViewCell.swift */,
 			);
 			path = Cell;

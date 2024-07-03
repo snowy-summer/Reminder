@@ -16,6 +16,7 @@ class BaseTableViewCell: UITableViewCell {
         configureHierarchy()
         configureUI()
         configureLayout()
+        configureGestureAndButtonAction()
     }
     
     @available(*, unavailable)
@@ -24,6 +25,9 @@ class BaseTableViewCell: UITableViewCell {
     }
     
     func configureHierarchy() { }
-    func configureUI() { }
+    func configureUI() {
+        selectionStyle = .none
+    }
     func configureLayout() { }
+    func configureGestureAndButtonAction() { }
 }

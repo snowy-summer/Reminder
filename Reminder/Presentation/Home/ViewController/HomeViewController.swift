@@ -25,6 +25,9 @@ final class HomeViewController: BaseViewController {
         NotificationCenter.default.removeObserver(self,
                                                   name: .pushNotification,
                                                   object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .updateNotification,
+                                                  object: nil)
     }
     
     override func configureNavigationBar() {
@@ -122,6 +125,11 @@ final class HomeViewController: BaseViewController {
                                                selector: #selector(pushListViewController),
                                                name: .pushNotification,
                                                object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateCollectionView),
+                                               name: .updateNotification,
+                                               object: nil)
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout{
@@ -146,9 +154,15 @@ final class HomeViewController: BaseViewController {
         return layout
     }
     
+    @objc private func updateCollectionView() {
+        
+        homeCollectionView.reloadData()
+    }
+    
     @objc private func pushListViewController() {
         
-        navigationController?.pushViewController(ListViewController(), animated: true)
+        navigationController?.pushViewController(ListViewController(data: HomeCollectionViewCellType.all.data,
+                                                                    type: .all), animated: true)
     }
     
     @objc private func addTodo() {
@@ -162,7 +176,8 @@ final class HomeViewController: BaseViewController {
     
     @objc private func addList() {
         
-        navigationController?.pushViewController(ListViewController(), animated: true)
+        navigationController?.pushViewController(ListViewController(data: HomeCollectionViewCellType.all.data,
+                                                                    type: .all), animated: true)
     }
 }
 
@@ -174,7 +189,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return HomeCollectionViewCellType.allCases.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCollectionViewCell,
@@ -202,5 +218,13 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return header
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        
+        if let data = HomeCollectionViewCellType(rawValue: indexPath.row)?.data {
+            
+            navigationController?.pushViewController(ListViewController(data: data,
+                                                                        type: HomeCollectionViewCellType(rawValue: indexPath.row)!), animated: true)
+        }
+    }
 }
