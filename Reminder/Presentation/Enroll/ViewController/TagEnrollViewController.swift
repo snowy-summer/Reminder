@@ -15,6 +15,19 @@ final class TagEnrollViewController: BaseViewController {
     private let tagLabel = UILabel()
     var changeValue: (([String]) -> Void)?
     
+    init(value: [String]?) {
+        super.init(nibName: nil, bundle: nil)
+        
+        if let tags = value {
+            tagLabel.text = tags.joined(separator: " ")
+        }
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -48,7 +61,6 @@ final class TagEnrollViewController: BaseViewController {
         addButton.layer.cornerRadius = 8
         addButton.backgroundColor = .cell
         
-        tagLabel.text = ""
         tagLabel.fontType(what: .listTag)
         tagLabel.numberOfLines = .zero
         

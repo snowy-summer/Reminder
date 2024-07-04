@@ -148,6 +148,7 @@ extension ListTableViewCell {
     }
     
     @objc private func changeTodoState() {
+        
         guard let changeState = changeState else { return }
         if changeState() {
             accessoryButton.setImage(UIImage(systemName: "circle.inset.filled"),

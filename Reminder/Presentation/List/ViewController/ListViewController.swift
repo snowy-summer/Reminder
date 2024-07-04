@@ -42,6 +42,13 @@ final class ListViewController: BaseViewController {
                                        menu: configureMenu())
         
         navigationItem.rightBarButtonItem = moreItem
+        
+        let popItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"),
+                                      style: .plain,
+                                      target: self,
+                                      action: #selector(pVC))
+        
+        navigationItem.leftBarButtonItem = popItem
     }
     
     override func configureHierarchy() {
@@ -65,8 +72,8 @@ final class ListViewController: BaseViewController {
         }
     }
     
-    override func popVC() {
-        super.popVC()
+    @objc private func pVC() {
+        navigationController?.popViewController(animated: true)
         NotificationCenter.default.post(name: .updateNotification, object: nil)
     }
     
@@ -77,19 +84,19 @@ extension ListViewController {
     
     private func configureMenu() -> UIMenu {
         
-        let sortedByTitle = UIAction(title: "제목 순으로 보기") { _ in
-            
-            self.data = self.data.sorted(byKeyPath: "title", ascending: true)
+        let sortedByTitle = UIAction(title: "제목 순으로 보기") { [weak self] _ in
+            guard let self = self else { return }
+            data = data.sorted(byKeyPath: "title", ascending: true)
         }
         
-        let sortedByDate = UIAction(title: "마감일 순으로 보기") { _ in
-            
-            self.data = self.data.sorted(byKeyPath: "deadLine", ascending: true)
+        let sortedByDate = UIAction(title: "마감일 순으로 보기") { [weak self] _ in
+            guard let self = self else { return }
+            data = data.sorted(byKeyPath: "deadLine", ascending: true)
         }
         
-        let sortedByPriority = UIAction(title: "우선순위 순으로 보기") { _ in
-            
-            self.data = self.data.sorted(byKeyPath: "priority", ascending: true)
+        let sortedByPriority = UIAction(title: "우선순위 순으로 보기") { [weak self] _ in
+            guard let self = self else { return }
+            data = data.sorted(byKeyPath: "priority", ascending: true)
         }
         
         let items = [
@@ -144,7 +151,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let delete = UIContextualAction(style: .normal,
-                                        title: "삭제") { [weak self] action, view, completionHandler in
+                                        title: nil) { [weak self] action, view, completionHandler in
             guard let self = self else { return }
             
             let todo = data[indexPath.row]
@@ -153,7 +160,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         let favorite = UIContextualAction(style: .normal,
-                                          title: "즐겨찾기") { [weak self] action, view, completionHandler in
+                                          title: nil) { [weak self] action, view, completionHandler in
             guard let self = self else { return }
             
             
@@ -164,6 +171,12 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
         }
+        
+        delete.backgroundColor = #colorLiteral(red: 0.9982114434, green: 0.3084382713, blue: 0.2676828206, alpha: 1)
+        delete.image = UIImage(systemName: "trash")
+        
+        favorite.backgroundColor = #colorLiteral(red: 1, green: 0.6641262174, blue: 0.07634276897, alpha: 1)
+        favorite.image = UIImage(systemName: "flag.circle.fill")
         
         let configuration = UISwipeActionsConfiguration(actions: [delete, favorite])
         configuration.performsFirstActionWithFullSwipe = false

@@ -12,6 +12,20 @@ final class DeadLineEnrollViewController: BaseViewController {
     
     private let datePicker = UIDatePicker()
     var changeValue: ((Date) -> Void)?
+    
+    init(value: Date?) {
+        super.init(nibName: nil, bundle: nil)
+        
+        if let date = value {
+            datePicker.date = date
+        }
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

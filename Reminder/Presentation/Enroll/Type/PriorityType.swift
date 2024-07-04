@@ -11,6 +11,7 @@ enum PriorityType: Int, CaseIterable {
     case high
     case middle
     case low
+    case no
     
     var title: String {
         switch self {
@@ -20,6 +21,8 @@ enum PriorityType: Int, CaseIterable {
             return "중"
         case .low:
             return "하"
+        case .no:
+            return ""
         }
     }
     
@@ -31,6 +34,8 @@ enum PriorityType: Int, CaseIterable {
             return "!!"
         case .low:
             return "!"
+        case .no:
+            return ""
         }
     }
 }

@@ -19,18 +19,8 @@ class BaseViewController: UIViewController {
         configureGestureAndButtonAction()
     }
      
-    func configureNavigationBar() { 
-        
-        let popItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"),
-                                      style: .plain,
-                                      target: self,
-                                      action: #selector(popVC))
-        
-        navigationItem.leftBarButtonItem = popItem
-    }
-    
+    func configureNavigationBar() { }
     func configureHierarchy() { }
-    
     func configureUI() {
         
         view.backgroundColor = .base
@@ -56,10 +46,6 @@ class BaseViewController: UIViewController {
         alert.addAction(cancel)
         
         present(alert, animated: true)
-    }
-    
-    @objc func popVC() {
-        navigationController?.popViewController(animated: true)
     }
      
 }

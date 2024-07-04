@@ -6,21 +6,28 @@
 //
 
 import UIKit
+import Combine
+import PhotosUI
 import SnapKit
-import RealmSwift
 
 final class EnrollViewController: BaseViewController {
     
     private let enrollTableView = UITableView(frame: .zero,
                                               style: .insetGrouped)
-    private let model = Todo(title: "")
-    private var saveItem = UIBarButtonItem()
+    
+    private var model = EnrollVCModel()
+    private let photoManager = PhotoManager()
+    private var cancellables = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(DataBaseManager.shared.realm.configuration.fileURL)
-    }
+        model.$photoImage.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.enrollTableView.reloadData()
+            }.store(in: &cancellables)
+            
+        }
     
     override func configureNavigationBar() {
         
@@ -29,7 +36,7 @@ final class EnrollViewController: BaseViewController {
                                          target: self,
                                          action: #selector(cancelButtonAction))
         
-        saveItem = UIBarButtonItem(title: "저장",
+        let saveItem = UIBarButtonItem(title: "저장",
                                    style: .plain,
                                    target: self,
                                    action: #selector(saveButtonAction))
@@ -78,7 +85,7 @@ extension EnrollViewController {
     
     @objc private func saveButtonAction() {
         
-        DataBaseManager.shared.add(model)
+        model.saveTodo()
         
         self.dismiss(animated: true) {
             NotificationCenter.default.post(name: .updateNotification, object: nil)
@@ -141,9 +148,9 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             
             switch type {
             case .title:
-                cell.updateContent(text: model.title)
+                cell.updateContent(text: model.todo.title)
             case .memo:
-                cell.updateContent(text: model.subTitle)
+                cell.updateContent(text: model.todo.subTitle)
             }
             
             
@@ -161,7 +168,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 
             case .deadLine:
                 var formattedDeadLine: String?
-                if let deadLine = model.deadLine {
+                if let deadLine = model.todo.deadLine {
                     formattedDeadLine = DateManager.shared.formattedDate(date: deadLine)
                     
                 }
@@ -170,10 +177,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                                    content: formattedDeadLine)
                 
             case .tag:
-                var text = ""
-                for tag in model.tag {
-                    text += "\(tag) "
-                }
+                var text = model.changeListToTags().joined(separator: " ")
                 
                 cell.updateContent(type: type,
                                    content: text)
@@ -182,7 +186,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 
                 var priorityText: String?
                 
-                if let priority = model.priority,
+                if let priority = model.todo.priority,
                    let text = PriorityType(rawValue: priority)?.title {
                     
                     priorityText = text
@@ -192,8 +196,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                                    content: priorityText)
                 
             case .addImage:
-                cell.updateContent(type: type,
-                                   content: nil)
+                cell.updateContent(imageContent: model.photoImage)
                 
             default:
                 break
@@ -206,54 +209,49 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView,
-                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let delete = UIContextualAction(style: .normal,
-                                        title: "삭제") { action, view, completionHandler in
-            let todo = DataBaseManager.shared.read(Todo.self)[indexPath.row]
-            DataBaseManager.shared.delete(todo)
-            tableView.reloadData()
-        }
-        
-        return UISwipeActionsConfiguration(actions: [delete])
-    }
-    
-    func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
         
         switch EnrollSections(rawValue: indexPath.section) {
         case .deadLine:
-            let vc = DeadLineEnrollViewController()
-            vc.changeValue = { value in
-                self.model.deadLine = value
+            let vc = DeadLineEnrollViewController(value: model.todo.deadLine)
+            vc.changeValue = { [weak self] value in
+                self?.model.todo.deadLine = value
                 tableView.reloadData()
             }
             navigationController?.pushViewController(vc, animated: false)
             
         case .tag:
-            let vc = TagEnrollViewController()
-            vc.changeValue = { value in
-                let list = List<String>()
-                value.forEach { tag in
-                    list.append(tag)
-                }
-                self.model.tag = list
+            let vc = TagEnrollViewController(value: model.changeListToTags() )
+            vc.changeValue = { [weak self] value in
+                self?.model.changeTagsToList(value: value)
                 tableView.reloadData()
             }
-            
             navigationController?.pushViewController(vc, animated: false)
             
         case .priority:
-            let vc = PriorityEnrollViewController()
-            vc.changeValue = { value in
-                self.model.priority = value
+            let vc: PriorityEnrollViewController
+            if model.todo.priority == PriorityType.no.rawValue {
+                vc = PriorityEnrollViewController(value: nil)
+            } else {
+                vc = PriorityEnrollViewController(value: model.todo.priority)
+            }
+            
+            vc.changeValue = { [weak self] value in
+                self?.model.todo.priority = value
                 tableView.reloadData()
                 
             }
             navigationController?.pushViewController(vc, animated: false)
             
         case .addImage:
-            break
+            var config = PHPickerConfiguration()
+            config.filter = .images
+            config.selectionLimit = 1
+            
+            let vc = PHPickerViewController(configuration: config)
+            vc.delegate = self
+            
+            present(vc, animated: true)
             
         default:
             break
@@ -263,6 +261,26 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
     
 }
 
+extension EnrollViewController: PHPickerViewControllerDelegate {
+    
+    func picker(_ picker: PHPickerViewController,
+                didFinishPicking results: [PHPickerResult]) {
+        
+        if let itemProvider = results.first?.itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            
+            itemProvider.loadObject(ofClass: UIImage.self) {[weak self] image, error in
+                
+                self?.model.photoImage = image as? UIImage
+            }
+        }
+        
+        dismiss(animated: true)
+    }
+    
+}
+
+//MARK: - TitleAndMemoTableViewCellDelegate
 extension EnrollViewController: TitleAndMemoTableViewCellDelegate {
     
     func changeSaveButtonEnabled(text: String, type: EnrollSections.Main) {
@@ -271,14 +289,16 @@ extension EnrollViewController: TitleAndMemoTableViewCellDelegate {
             
             switch type {
             case .title:
-                model.title = text
-                saveItem.isEnabled = true
+                model.todo.title = text
+                navigationItem.rightBarButtonItem?.isEnabled = true
+                
             case .memo:
-                model.subTitle = text
+                model.todo.subTitle = text
             }
             
         } else {
-            saveItem.isEnabled = false
+            
+            navigationItem.rightBarButtonItem?.isEnabled = false
         }
         
     }

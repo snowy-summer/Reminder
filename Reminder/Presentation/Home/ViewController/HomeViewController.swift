@@ -7,17 +7,27 @@
 
 import UIKit
 import SnapKit
+import RealmSwift
 
 final class HomeViewController: BaseViewController {
     
+    private let searchResultTableView = UITableView()
     private lazy var homeCollectionView = UICollectionView(frame: .zero,
                                                            collectionViewLayout: createCollectionViewLayout())
+    private let searchBar = UISearchBar()
+    private var searchModel: Results<Todo>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureNotification()
         configureToolBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        configureNavigationBar()
     }
     
     deinit {
@@ -32,15 +42,19 @@ final class HomeViewController: BaseViewController {
     
     override func configureNavigationBar() {
         
-        let moreItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"),
-                                       menu: configureMenu())
+        let moreItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"))
         
         navigationItem.rightBarButtonItem = moreItem
+        
+        navigationItem.titleView = searchBar
+        searchBar.delegate = self
+        
     }
     
     override func configureHierarchy() {
         
         view.addSubview(homeCollectionView)
+        view.addSubview(searchResultTableView)
     }
     
     override func configureUI() {
@@ -54,6 +68,14 @@ final class HomeViewController: BaseViewController {
         homeCollectionView.register(HomeHeaderView.self,
                                     forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                     withReuseIdentifier: HomeHeaderView.identifier)
+        
+        searchResultTableView.delegate = self
+        searchResultTableView.dataSource = self
+        searchResultTableView.isHidden = true
+        
+        searchResultTableView.register(ListTableViewCell.self,
+                                       forCellReuseIdentifier: ListTableViewCell.identifier)
+        
     }
     
     override func configureLayout() {
@@ -61,12 +83,16 @@ final class HomeViewController: BaseViewController {
         homeCollectionView.snp.makeConstraints { make in
             make.directionalEdges.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        searchResultTableView.snp.makeConstraints { make in
+            make.directionalEdges.equalTo(view.safeAreaLayoutGuide)
+        }
     }
     
     private func configureToolBar() {
         
         navigationController?.isToolbarHidden = false
-
+        
         let addTodoButton = UIButton()
         addTodoButton.toolBarButtonItem(type: .addTodo)
         addTodoButton.addTarget(self,
@@ -86,8 +112,8 @@ final class HomeViewController: BaseViewController {
                                             target: nil,
                                             action: nil)
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
-                                            target: nil,
-                                            action: nil)
+                                         target: nil,
+                                         action: nil)
         fixedSpace.width = -16
         
         toolbarItems = [
@@ -97,26 +123,6 @@ final class HomeViewController: BaseViewController {
             addListItem
         ]
         
-    }
-    
-    private func configureMenu() -> UIMenu {
-        
-        let sortedByTitle = UIAction(title: "제목 순으로 보기") { _ in
-        }
-        
-        let sortedByDate = UIAction(title: "마감일 순으로 보기") { _ in
-        }
-        
-        let sortedByPriority = UIAction(title: "우선순위 순으로 보기") { _ in
-        }
-        
-        let items = [
-            sortedByTitle,
-            sortedByDate,
-            sortedByPriority
-        ]
-        
-        return UIMenu(children: items)
     }
     
     private func configureNotification() {
@@ -154,6 +160,7 @@ final class HomeViewController: BaseViewController {
         return layout
     }
     
+    //MARK: - @objc
     @objc private func updateCollectionView() {
         
         homeCollectionView.reloadData()
@@ -161,8 +168,10 @@ final class HomeViewController: BaseViewController {
     
     @objc private func pushListViewController() {
         
-        navigationController?.pushViewController(ListViewController(data: HomeCollectionViewCellType.all.data,
-                                                                    type: .all), animated: true)
+        let vc = ListViewController(data: HomeCollectionViewCellType.all.data,
+                                    type: .all)
+
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func addTodo() {
@@ -176,8 +185,10 @@ final class HomeViewController: BaseViewController {
     
     @objc private func addList() {
         
-        navigationController?.pushViewController(ListViewController(data: HomeCollectionViewCellType.all.data,
-                                                                    type: .all), animated: true)
+        let vc = ListViewController(data: HomeCollectionViewCellType.all.data,
+                                    type: .all)
+        
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -227,4 +238,61 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                                                                         type: HomeCollectionViewCellType(rawValue: indexPath.row)!), animated: true)
         }
     }
+}
+
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+        return searchModel?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier,
+                                                       for: indexPath) as? ListTableViewCell else {
+            return ListTableViewCell()
+        }
+        
+        if let searchModel = searchModel {
+            let data = searchModel[indexPath.row]
+            cell.updateContent(data: data)
+        }
+        
+        
+        return cell
+    }
+    
+}
+
+//MARK: - SearchBarDelegate
+extension HomeViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let searchedData = DataBaseManager.shared.read(Todo.self).where {
+            $0.title.contains(searchText, options: .caseInsensitive) ||
+            $0.subTitle.contains(searchText, options: .caseInsensitive)
+        }
+
+        if searchText.isEmpty {
+            homeCollectionView.isHidden = false
+            searchResultTableView.isHidden = true
+            searchModel = nil
+        } else {
+            searchResultTableView.isHidden = false
+            homeCollectionView.isHidden = true
+            searchModel = searchedData
+        }
+        
+        searchResultTableView.reloadData()
+        
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchResultTableView.isHidden = true
+        homeCollectionView.isHidden = false
+        
+    }
+   
 }

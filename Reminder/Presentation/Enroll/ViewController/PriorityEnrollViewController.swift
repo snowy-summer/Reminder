@@ -13,6 +13,19 @@ final class PriorityEnrollViewController: BaseViewController {
     private let priorityControl = UISegmentedControl(items: ["상", "중", "하"])
     var changeValue: ((Int) -> Void)?
     
+    init(value: Int?) {
+        super.init(nibName: nil, bundle: nil)
+        
+        if let priority = value {
+            priorityControl.selectedSegmentIndex = priority
+        }
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
