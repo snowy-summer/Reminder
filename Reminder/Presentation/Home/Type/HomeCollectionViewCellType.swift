@@ -98,14 +98,14 @@ enum HomeCollectionViewCellType:Int, CaseIterable {
         switch self {
         case .today:
             
-            return results.filter {
+            return results.where {
                 $0.deadLine == Date()
             }.count
             
         case .will:
             
-            let futureResults = results.filter {
-                $0.deadLine != nil && $0.deadLine! > Date.now
+            let futureResults = results.where {
+                $0.deadLine != nil && $0.deadLine > Date()
             }
 
             return futureResults.count
@@ -115,13 +115,13 @@ enum HomeCollectionViewCellType:Int, CaseIterable {
             
         case .pin:
             
-            return results.filter {
+            return results.where {
                 $0.isPined == true
             }.count
             
         case .done:
             
-            return results.filter {
+            return results.where {
                 $0.isDone == true
             }.count
         }

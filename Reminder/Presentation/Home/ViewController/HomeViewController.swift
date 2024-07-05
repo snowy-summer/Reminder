@@ -40,11 +40,21 @@ final class HomeViewController: BaseViewController {
                                                   object: nil)
     }
     
+//MARK: - Configuration
     override func configureNavigationBar() {
         
-        let moreItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"))
+        let calendarItem = UIBarButtonItem(image: UIImage(systemName: "calendar"),
+                                           style: .plain,
+                                           target: self,
+                                           action: #selector(showCalendar))
         
-        navigationItem.rightBarButtonItem = moreItem
+        let undoItem = UIBarButtonItem(image: UIImage(systemName:"arrow.counterclockwise"),
+                                       style: .plain,
+                                       target: self,
+                                       action: #selector(showTableOrCollectionView))
+        
+        navigationItem.leftBarButtonItem = calendarItem
+        navigationItem.rightBarButtonItem = undoItem
         
         navigationItem.titleView = searchBar
         searchBar.delegate = self
@@ -159,8 +169,11 @@ final class HomeViewController: BaseViewController {
         
         return layout
     }
+}
+
+//MARK: - Method
+extension HomeViewController {
     
-    //MARK: - @objc
     @objc private func updateCollectionView() {
         
         homeCollectionView.reloadData()
@@ -170,7 +183,7 @@ final class HomeViewController: BaseViewController {
         
         let vc = ListViewController(data: HomeCollectionViewCellType.all.data,
                                     type: .all)
-
+        
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -189,6 +202,43 @@ final class HomeViewController: BaseViewController {
                                     type: .all)
         
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc private func showCalendar() {
+        
+        let vc = CalendarModal()
+        vc.modalPresentationStyle = .pageSheet
+        vc.showFilteredResult = { [weak self] value in
+            self?.showFilteredResult(date: value)
+        }
+        if let sheet = vc.sheetPresentationController {
+            
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.prefersGrabberVisible = true
+        }
+        
+        present(vc, animated: true)
+    }
+    
+    @objc private func showTableOrCollectionView() {
+        searchResultTableView.isHidden.toggle()
+        homeCollectionView.isHidden.toggle()
+    }
+    
+    private func showFilteredResult(date: Date) {
+        
+        let dateString = DateManager.shared.formattedDate(date: date)
+        
+        let searchedData = DataBaseManager.shared.read(Todo.self).where {
+
+            $0.deadLine == date
+        }
+        
+        showTableOrCollectionView()
+        searchModel = searchedData
+        
+        searchResultTableView.reloadData()
     }
 }
 
@@ -240,10 +290,11 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
 }
 
+//MARK: - TableViewDelegate
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    
+        
         return searchModel?.count ?? 0
     }
     
@@ -273,14 +324,12 @@ extension HomeViewController: UISearchBarDelegate {
             $0.title.contains(searchText, options: .caseInsensitive) ||
             $0.subTitle.contains(searchText, options: .caseInsensitive)
         }
-
+        
         if searchText.isEmpty {
-            homeCollectionView.isHidden = false
-            searchResultTableView.isHidden = true
+            showTableOrCollectionView()
             searchModel = nil
         } else {
-            searchResultTableView.isHidden = false
-            homeCollectionView.isHidden = true
+            showTableOrCollectionView()
             searchModel = searchedData
         }
         
@@ -290,9 +339,8 @@ extension HomeViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
-        searchResultTableView.isHidden = true
-        homeCollectionView.isHidden = false
+       showTableOrCollectionView()
         
     }
-   
+    
 }
