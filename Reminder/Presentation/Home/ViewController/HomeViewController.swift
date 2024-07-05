@@ -40,7 +40,7 @@ final class HomeViewController: BaseViewController {
                                                   object: nil)
     }
     
-//MARK: - Configuration
+    //MARK: - Configuration
     override func configureNavigationBar() {
         
         let calendarItem = UIBarButtonItem(image: UIImage(systemName: "calendar"),
@@ -228,11 +228,12 @@ extension HomeViewController {
     
     private func showFilteredResult(date: Date) {
         
-        let dateString = DateManager.shared.formattedDate(date: date)
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: date)!
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: date)!
         
         let searchedData = DataBaseManager.shared.read(Todo.self).where {
-
-            $0.deadLine == date
+            $0.deadLine >= yesterday && $0.deadLine <= tomorrow
         }
         
         showTableOrCollectionView()
@@ -339,7 +340,7 @@ extension HomeViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
-       showTableOrCollectionView()
+        showTableOrCollectionView()
         
     }
     

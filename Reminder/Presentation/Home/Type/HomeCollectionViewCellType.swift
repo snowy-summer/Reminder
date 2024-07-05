@@ -97,13 +97,18 @@ enum HomeCollectionViewCellType:Int, CaseIterable {
         
         switch self {
         case .today:
+            let calendar = Calendar.current
+            let now = Date()
+            let yesterday = calendar.date(byAdding: .day, value: -1, to: now) ?? Date()
+            let tomorrow = calendar.date(byAdding: .day, value: 1, to: now) ?? Date()
             
-            return results.where {
-                $0.deadLine == Date()
-            }.count
+            let searchedData = DataBaseManager.shared.read(Todo.self).where {
+                $0.deadLine >= yesterday && $0.deadLine <= tomorrow
+            }
+            
+            return searchedData.count
             
         case .will:
-            
             let futureResults = results.where {
                 $0.deadLine != nil && $0.deadLine > Date()
             }

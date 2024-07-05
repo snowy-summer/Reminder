@@ -78,11 +78,9 @@ extension CalendarModal: FSCalendarDelegate, FSCalendarDataSource {
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
-        // 왜 현재 날짜가 안나옴???
+           let selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
           dismiss(animated: true) { [weak self] in
-              print(date)
-              print(self?.calendarView.selectedDate)
-              self?.showFilteredResult?(date)
+              self?.showFilteredResult?(selectedDate)
           }
         
     }
