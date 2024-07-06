@@ -17,12 +17,13 @@ final class DataBaseManager {
     func add<T: Object>(_ object: T) {
                 
         do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(object)
-            }
-        } catch {
-            print(error)
+           let realm = try Realm()
+           
+           try realm.write {
+               realm.add(object, update: .modified)
+           }
+        } catch let error {
+           print(error)
         }
     }
     

@@ -13,7 +13,7 @@ final class EnrollExtraTableViewCell: BaseTableViewCell {
     private let titleLabel = UILabel()
     private let pushButton = UIButton()
     private let contentLabel = UILabel()
-    private let thumnailImageView = UIImageView()
+    private let thumbnailImageView = UIImageView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -25,7 +25,7 @@ final class EnrollExtraTableViewCell: BaseTableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(pushButton)
         contentView.addSubview(contentLabel)
-        contentView.addSubview(thumnailImageView)
+        contentView.addSubview(thumbnailImageView)
     }
     
     override func configureUI() {
@@ -39,9 +39,9 @@ final class EnrollExtraTableViewCell: BaseTableViewCell {
         
         contentLabel.textAlignment = .right
         
-        thumnailImageView.contentMode = .scaleAspectFill
-        thumnailImageView.layer.cornerRadius = 8
-        thumnailImageView.layer.masksToBounds = true
+        thumbnailImageView.contentMode = .scaleAspectFill
+        thumbnailImageView.layer.cornerRadius = 8
+        thumbnailImageView.layer.masksToBounds = true
     }
     
     override func configureLayout() {
@@ -65,10 +65,10 @@ final class EnrollExtraTableViewCell: BaseTableViewCell {
             make.width.equalTo(contentView.snp.width).multipliedBy(0.4)
         }
         
-        thumnailImageView.snp.makeConstraints { make in
+        thumbnailImageView.snp.makeConstraints { make in
             make.trailing.equalTo(pushButton.snp.leading).offset(-20)
             make.verticalEdges.equalTo(contentView.snp.verticalEdges).inset(4)
-            make.width.equalTo(thumnailImageView.snp.height)
+            make.width.equalTo(thumbnailImageView.snp.height)
         }
     }
     
@@ -76,7 +76,7 @@ final class EnrollExtraTableViewCell: BaseTableViewCell {
         
         titleLabel.text = type.text
         contentLabel.text = content
-        thumnailImageView.isHidden = true
+        thumbnailImageView.isHidden = true
         contentLabel.isHidden = false
         
         switch type {
@@ -96,8 +96,8 @@ final class EnrollExtraTableViewCell: BaseTableViewCell {
         
         titleLabel.text = EnrollSections.addImage.text
         contentLabel.isHidden = true
-        thumnailImageView.isHidden = false
-        thumnailImageView.image = imageContent
+        thumbnailImageView.isHidden = false
+        thumbnailImageView.image = imageContent
         
     }
 }

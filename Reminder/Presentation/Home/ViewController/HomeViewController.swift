@@ -36,7 +36,7 @@ final class HomeViewController: BaseViewController {
                                                   name: .pushNotification,
                                                   object: nil)
         NotificationCenter.default.removeObserver(self,
-                                                  name: .updateNotification,
+                                                  name: .updateHomeNotification,
                                                   object: nil)
     }
     
@@ -144,7 +144,7 @@ final class HomeViewController: BaseViewController {
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateCollectionView),
-                                               name: .updateNotification,
+                                               name: .updateHomeNotification,
                                                object: nil)
     }
     

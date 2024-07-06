@@ -19,6 +19,23 @@ final class EnrollViewController: BaseViewController {
     private let photoManager = PhotoManager()
     private var cancellables = Set<AnyCancellable>()
     
+    convenience init(todo: Todo, type: EnrollVCModel.EnrollType) {
+        self.init(nibName: nil, bundle: nil)
+        
+        self.model.todo.title = todo.title
+        self.model.todo.subTitle = todo.subTitle
+        self.model.todo.priority = todo.priority
+        self.model.todo.imageName = todo.imageName
+        self.model.todo.deadLine = todo.deadLine
+        self.model.todo.releaseDate = todo.releaseDate
+        self.model.todo.tag = todo.tag
+        self.model.todo.isDone = todo.isDone
+        self.model.todo.isPined = todo.isPined
+        
+        self.model.type = type
+        self.model.editId = todo.id
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,8 +43,8 @@ final class EnrollViewController: BaseViewController {
             .sink { [weak self] _ in
                 self?.enrollTableView.reloadData()
             }.store(in: &cancellables)
-            
-        }
+        
+    }
     
     override func configureNavigationBar() {
         
@@ -37,9 +54,9 @@ final class EnrollViewController: BaseViewController {
                                          action: #selector(cancelButtonAction))
         
         let saveItem = UIBarButtonItem(title: "저장",
-                                   style: .plain,
-                                   target: self,
-                                   action: #selector(saveButtonAction))
+                                       style: .plain,
+                                       target: self,
+                                       action: #selector(saveButtonAction))
         saveItem.isEnabled = false
         
         navigationItem.rightBarButtonItem = saveItem
@@ -80,16 +97,24 @@ extension EnrollViewController {
     
     @objc private func cancelButtonAction() {
         
-        dismiss(animated: true)
+        if model.type == .create {
+            dismiss(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     @objc private func saveButtonAction() {
         
         model.saveTodo()
         
-        self.dismiss(animated: true) {
-            NotificationCenter.default.post(name: .updateNotification, object: nil)
-            NotificationCenter.default.post(name: .pushNotification, object: nil)
+        if model.type == .create {
+            dismiss(animated: true) {
+                NotificationCenter.default.post(name: .updateHomeNotification, object: nil)
+                NotificationCenter.default.post(name: .pushNotification, object: nil)
+            }
+        } else {
+            navigationController?.popViewController(animated: true)
         }
     }
     

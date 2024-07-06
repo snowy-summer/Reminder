@@ -9,5 +9,5 @@ import Foundation
 
 extension Notification.Name {
     static let pushNotification = Notification.Name("pushNotification")
-    static let updateNotification = Notification.Name("updateNotification")
+    static let updateHomeNotification = Notification.Name("updateHomeNotification")
 }

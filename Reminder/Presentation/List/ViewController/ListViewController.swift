@@ -12,7 +12,7 @@ import RealmSwift
 final class ListViewController: BaseViewController {
     
     private let listTableView = UITableView()
-    private var data: Results<Todo> {
+    private var model: Results<Todo> {
         didSet {
             listTableView.reloadData()
         }
@@ -20,7 +20,7 @@ final class ListViewController: BaseViewController {
     
     init(data: Results<Todo>,
          type: HomeCollectionViewCellType) {
-        self.data = data
+        self.model = data
         super.init(nibName: nil, bundle: nil)
         
         configureTableHeaderView(type: type)
@@ -35,6 +35,12 @@ final class ListViewController: BaseViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        listTableView.reloadData()
+    }
+    
     override func configureNavigationBar() {
         super.configureNavigationBar()
         
@@ -46,7 +52,7 @@ final class ListViewController: BaseViewController {
         let popItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"),
                                       style: .plain,
                                       target: self,
-                                      action: #selector(pVC))
+                                      action: #selector(popVC))
         
         navigationItem.leftBarButtonItem = popItem
     }
@@ -72,9 +78,14 @@ final class ListViewController: BaseViewController {
         }
     }
     
-    @objc private func pVC() {
+    @objc private func popVC() {
         navigationController?.popViewController(animated: true)
-        NotificationCenter.default.post(name: .updateNotification, object: nil)
+        NotificationCenter.default.post(name: .updateHomeNotification, object: nil)
+    }
+    
+    @objc private func updateTable() {
+        
+        listTableView.reloadData()
     }
     
 }
@@ -86,17 +97,17 @@ extension ListViewController {
         
         let sortedByTitle = UIAction(title: "제목 순으로 보기") { [weak self] _ in
             guard let self = self else { return }
-            data = data.sorted(byKeyPath: "title", ascending: true)
+            model = model.sorted(byKeyPath: "title", ascending: true)
         }
         
         let sortedByDate = UIAction(title: "마감일 순으로 보기") { [weak self] _ in
             guard let self = self else { return }
-            data = data.sorted(byKeyPath: "deadLine", ascending: true)
+            model = model.sorted(byKeyPath: "deadLine", ascending: true)
         }
         
         let sortedByPriority = UIAction(title: "우선순위 순으로 보기") { [weak self] _ in
             guard let self = self else { return }
-            data = data.sorted(byKeyPath: "priority", ascending: true)
+            model = model.sorted(byKeyPath: "priority", ascending: true)
         }
         
         let items = [
@@ -125,7 +136,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return model.count
     }
     
     func tableView(_ tableView: UITableView,
@@ -135,7 +146,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
                                                        for: indexPath) as? ListTableViewCell else {
             return ListTableViewCell()
         }
-        let data = data[indexPath.row]
+        let data = model[indexPath.row]
         cell.changeState = {
             DataBaseManager.shared.update(data) { data in
                 data.isDone.toggle()
@@ -154,7 +165,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
                                         title: nil) { [weak self] action, view, completionHandler in
             guard let self = self else { return }
             
-            let todo = data[indexPath.row]
+            let todo = model[indexPath.row]
             DataBaseManager.shared.delete(todo)
             tableView.reloadData()
         }
@@ -164,7 +175,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             guard let self = self else { return }
             
             
-            let data = data[indexPath.row]
+            let data = model[indexPath.row]
             
             DataBaseManager.shared.update(data) { data in
                 data.isPined.toggle()
@@ -182,6 +193,12 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         configuration.performsFirstActionWithFullSwipe = false
         
         return configuration
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let data = model[indexPath.row]
+        navigationController?.pushViewController(EnrollViewController(todo: data, type: .edit), animated: true)
     }
     
 }
