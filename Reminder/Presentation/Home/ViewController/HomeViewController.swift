@@ -16,12 +16,14 @@ final class HomeViewController: BaseViewController {
                                                            collectionViewLayout: createCollectionViewLayout())
     private let searchBar = UISearchBar()
     private var searchModel: Results<Todo>?
+    private var folderList: [Folder] = Array(DataBaseManager.shared.read(Folder.self))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureNotification()
         configureToolBar()
+        DataBaseManager.shared.getFileURL()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -192,16 +194,16 @@ extension HomeViewController {
         let nv = UINavigationController(rootViewController: EnrollViewController())
         nv.modalPresentationStyle = .fullScreen
         
-        present(nv,
-                animated: true)
+        present(nv, animated: true)
     }
     
     @objc private func addList() {
         
-        let vc = ListViewController(data: HomeCollectionViewCellType.all.data,
-                                    type: .all)
         
-        navigationController?.pushViewController(vc, animated: true)
+        let nv = UINavigationController(rootViewController: AddFolderViewController())
+        nv.modalPresentationStyle = .fullScreen
+        
+        present(nv, animated: true)
     }
     
     @objc private func showCalendar() {
@@ -248,21 +250,27 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         
-        return HomeCollectionViewCellType.allCases.count
+        return HomeCollectionViewCellType.allCases.count + folderList.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifier,
-                                                            for: indexPath) as? HomeCollectionViewCell,
-              let cellType = HomeCollectionViewCellType(rawValue: indexPath.row) else {
+                                                            for: indexPath) as? HomeCollectionViewCell
+              else {
             
             return HomeCollectionViewCell()
         }
         
-        
-        cell.updateContent(type: cellType)
+        if let cellType = HomeCollectionViewCellType(rawValue: indexPath.row) {
+            
+            cell.updateContent(type: cellType)
+        } else {
+            let data = folderList[indexPath.row - HomeCollectionViewCellType.allCases.count]
+            
+            cell.updateContent(data: data)
+        }
         
         return cell
     }
@@ -286,7 +294,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if let data = HomeCollectionViewCellType(rawValue: indexPath.row)?.data {
             
             navigationController?.pushViewController(ListViewController(data: data,
-                                                                        type: HomeCollectionViewCellType(rawValue: indexPath.row)!), animated: true)
+                                                                        type: HomeCollectionViewCellType(rawValue: indexPath.row)!),
+                                                     animated: true)
+        } else {
+            let data = folderList[indexPath.row - HomeCollectionViewCellType.allCases.count]
+            navigationController?.pushViewController(ExtraTodoInFolderViewController(data: data),
+                                                     animated: true)
         }
     }
 }

@@ -1,29 +1,27 @@
 //
-//  ListViewController.swift
+//  ExtraTodoInFolderViewController.swift
 //  Reminder
 //
-//  Created by 최승범 on 7/2/24.
+//  Created by 최승범 on 7/8/24.
 //
 
 import UIKit
 import SnapKit
 import RealmSwift
 
-final class ListViewController: BaseViewController {
+final class ExtraTodoInFolderViewController: BaseViewController {
     
     private let listTableView = UITableView()
-    private var model: Results<Todo> {
+    private var model: List<Todo> {
         didSet {
             listTableView.reloadData()
         }
     }
     
-    init(data: Results<Todo>,
-         type: HomeCollectionViewCellType) {
-        self.model = data
+    init(data: Folder) {
+        self.model = data.todoList
         super.init(nibName: nil, bundle: nil)
         
-        configureTableHeaderView(type: type)
     }
     
     required init?(coder: NSCoder) {
@@ -44,8 +42,7 @@ final class ListViewController: BaseViewController {
     override func configureNavigationBar() {
         super.configureNavigationBar()
         
-        let moreItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"),
-                                       menu: configureMenu())
+        let moreItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"))
         
         navigationItem.rightBarButtonItem = moreItem
         
@@ -80,44 +77,8 @@ final class ListViewController: BaseViewController {
     
 }
 
-//MARK: - ListVC private, @objc
-extension ListViewController {
-    
-    private func configureMenu() -> UIMenu {
-        
-        let sortedByTitle = UIAction(title: "제목 순으로 보기") { [weak self] _ in
-            guard let self = self else { return }
-            model = model.sorted(byKeyPath: "title", ascending: true)
-        }
-        
-        let sortedByDate = UIAction(title: "마감일 순으로 보기") { [weak self] _ in
-            guard let self = self else { return }
-            model = model.sorted(byKeyPath: "deadLine", ascending: true)
-        }
-        
-        let sortedByPriority = UIAction(title: "우선순위 순으로 보기") { [weak self] _ in
-            guard let self = self else { return }
-            model = model.sorted(byKeyPath: "priority", ascending: true)
-        }
-        
-        let items = [
-            sortedByTitle,
-            sortedByDate,
-            sortedByPriority
-        ]
-        
-        return UIMenu(children: items)
-    }
-    
-    private func configureTableHeaderView(type: HomeCollectionViewCellType) {
-        
-        let headerView = TitleHeaderView(type: type)
-        headerView.frame = CGRect(x: 0,
-                                  y: 0,
-                                  width: listTableView.frame.width,
-                                  height: 44)
-        listTableView.tableHeaderView = headerView
-    }
+//MARK: - private, @objc
+extension ExtraTodoInFolderViewController {
     
     @objc private func popVC() {
         navigationController?.popViewController(animated: true)
@@ -132,7 +93,7 @@ extension ListViewController {
 }
 
 //MARK: - TableView Delegate, DataSource
-extension ListViewController: UITableViewDelegate, UITableViewDataSource {
+extension ExtraTodoInFolderViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {

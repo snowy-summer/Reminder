@@ -19,6 +19,12 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         
     }
     
+    override func prepareForReuse() {
+        iconImage.image = nil
+        titleLabel.text = ""
+        countLabel.text = "0"
+    }
+    
     override func configureHierarchy() {
         
         contentView.addSubview(iconImage)
@@ -68,5 +74,11 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         titleLabel.text = type.title
         countLabel.text = String(type.dataCount)
         
+    }
+    
+    func updateContent(data: Folder) {
+        
+        titleLabel.text = data.name
+        countLabel.text = String(data.todoList.count)
     }
 }

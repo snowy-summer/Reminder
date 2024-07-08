@@ -14,6 +14,11 @@ final class DataBaseManager {
     
     private init() { }
     
+    func getFileURL() {
+        let realm = try! Realm()
+        print(realm.configuration.fileURL)
+    }
+    
     func add<T: Object>(_ object: T) {
                 
         do {
