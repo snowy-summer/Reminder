@@ -21,7 +21,7 @@ final class Todo: Object {
     @Persisted var isPined = false
     @Persisted var isDone = false
     
-    @Persisted(originProperty: "todoList") var folder: LinkingObjects<Folder>
+    @Persisted(originProperty: "todoList") var folder: LinkingObjects<CustomTodoFolder>
     
     convenience init(title: String,
                      priority: Int? = nil,

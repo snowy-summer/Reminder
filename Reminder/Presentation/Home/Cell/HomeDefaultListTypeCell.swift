@@ -1,5 +1,5 @@
 //
-//  HomeCollectionViewCell.swift
+//  HomeDefaultListTypeCell.swift
 //  Reminder
 //
 //  Created by 최승범 on 7/3/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class HomeCollectionViewCell: BaseCollectionViewCell {
+final class HomeDefaultListTypeCell: BaseCollectionViewCell {
     
     private let iconImage = UIImageView()
     private let titleLabel = UILabel()
@@ -34,7 +34,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     
     override func configureUI() {
         
-        contentView.backgroundColor = #colorLiteral(red: 0.1098036841, green: 0.1098041013, blue: 0.1183908954, alpha: 1)
+        contentView.backgroundColor = .cell
         contentView.layer.cornerRadius = 12
         contentView.layer.cornerCurve = .continuous
         
@@ -61,7 +61,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
-    func updateContent(type: HomeCollectionViewCellType) {
+    func updateContent(type: HomeFilteredFolderCellType) {
         
         
         var config = UIImage.SymbolConfiguration(paletteColors: [ .white, type.iconTintColor])
@@ -76,7 +76,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         
     }
     
-    func updateContent(data: Folder) {
+    func updateContent(data: CustomTodoFolder) {
         
         titleLabel.text = data.name
         countLabel.text = String(data.todoList.count)

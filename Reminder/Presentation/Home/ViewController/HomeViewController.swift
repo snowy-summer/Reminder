@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 import RealmSwift
 
@@ -15,15 +16,18 @@ final class HomeViewController: BaseViewController {
     private lazy var homeCollectionView = UICollectionView(frame: .zero,
                                                            collectionViewLayout: createCollectionViewLayout())
     private let searchBar = UISearchBar()
-    private var searchModel: Results<Todo>?
-    private var folderList: [Folder] = Array(DataBaseManager.shared.read(Folder.self))
+    
+    private let viewModel = HomeViewModel()
+    private var cancellable = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureNotification()
         configureToolBar()
-        DataBaseManager.shared.getFileURL()
+        
+        bindOutPut()
+        viewModel.applyUserInput(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,8 +79,11 @@ final class HomeViewController: BaseViewController {
         homeCollectionView.delegate = self
         homeCollectionView.dataSource = self
         
-        homeCollectionView.register(HomeCollectionViewCell.self,
-                                    forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
+        homeCollectionView.register(HomeDefaultListTypeCell.self,
+                                    forCellWithReuseIdentifier: HomeDefaultListTypeCell.identifier)
+        homeCollectionView.register(HomeCustomListTypeCell.self,
+                                    forCellWithReuseIdentifier: HomeCustomListTypeCell.identifier)
+        
         homeCollectionView.register(HomeHeaderView.self,
                                     forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                     withReuseIdentifier: HomeHeaderView.identifier)
@@ -150,31 +157,48 @@ final class HomeViewController: BaseViewController {
                                                object: nil)
     }
     
-    private func createCollectionViewLayout() -> UICollectionViewLayout{
+    private func createCollectionViewLayout() -> UICollectionViewLayout {
         
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 16
-        layout.minimumInteritemSpacing = 16
-        layout.sectionInset = UIEdgeInsets(top: 0,
-                                           left: 8,
-                                           bottom: 0,
-                                           right: 8)
-        layout.scrollDirection = .vertical
+        let collectioViewCompositonalLayout = UICollectionViewCompositionalLayout {
+            (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+            
+            
+            return HomeCollectionViewSection(rawValue: sectionIndex)?.layoutSection(environment: layoutEnvironment)
+        }
         
-        let width = (view.frame.width - 32) / 2
-        let height = view.frame.height * 0.1
-        layout.itemSize = CGSize(width: width,
-                                 height: height)
-        
-        layout.headerReferenceSize = CGSize(width: view.frame.width,
-                                            height: height)
-        
-        return layout
+        return collectioViewCompositonalLayout
     }
 }
 
 //MARK: - Method
 extension HomeViewController {
+    
+    private func bindOutPut() {
+        
+        viewModel.$customFolderList.receive(on:DispatchQueue.main)
+            .sink { [weak self] _ in
+            guard let self = self else { return }
+            
+            homeCollectionView.reloadSections(IndexSet(integer: HomeCollectionViewSection.customList.rawValue))
+        }.store(in: &cancellable)
+        
+        viewModel.$searhResultList.receive(on:DispatchQueue.main)
+            .sink { [weak self] value in
+            guard let self = self else { return }
+            
+            guard let value = value else {
+                searchResultTableView.isHidden = true
+                homeCollectionView.isHidden = false
+                return
+            }
+            
+                searchResultTableView.isHidden = false
+                homeCollectionView.isHidden = true
+                searchResultTableView.reloadData()
+        
+        }.store(in: &cancellable)
+        
+    }
     
     @objc private func updateCollectionView() {
         
@@ -183,7 +207,7 @@ extension HomeViewController {
     
     @objc private func pushListViewController() {
         
-        let vc = ListViewController(data: HomeCollectionViewCellType.all.data,
+        let vc = ListViewController(data: HomeFilteredFolderCellType.all.data,
                                     type: .all)
         
         navigationController?.pushViewController(vc, animated: true)
@@ -224,55 +248,91 @@ extension HomeViewController {
     }
     
     @objc private func showTableOrCollectionView() {
-        searchResultTableView.isHidden.toggle()
-        homeCollectionView.isHidden.toggle()
+        //        searchResultTableView.isHidden.toggle()
+        //        homeCollectionView.isHidden.toggle()
     }
-    
+    //
     private func showFilteredResult(date: Date) {
         
-        let calendar = Calendar.current
-        let yesterday = calendar.date(byAdding: .day, value: -1, to: date)!
-        let tomorrow = calendar.date(byAdding: .day, value: 1, to: date)!
+        //        let calendar = Calendar.current
+        //        let yesterday = calendar.date(byAdding: .day, value: -1, to: date)!
+        //        let tomorrow = calendar.date(byAdding: .day, value: 1, to: date)!
+        //
+        //        let searchedData = DataBaseManager.shared.read(Todo.self).where {
+        //            $0.deadLine >= yesterday && $0.deadLine <= tomorrow
+        //        }
+        //
+        //        showTableOrCollectionView()
+        //        searchModel = searchedData
+        //
+        //        searchResultTableView.reloadData()
         
-        let searchedData = DataBaseManager.shared.read(Todo.self).where {
-            $0.deadLine >= yesterday && $0.deadLine <= tomorrow
-        }
         
-        showTableOrCollectionView()
-        searchModel = searchedData
-        
-        searchResultTableView.reloadData()
     }
 }
 
 //MARK: - CollectionView Delegate, DataSource
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return HomeCollectionViewSection.allCases.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         
-        return HomeCollectionViewCellType.allCases.count + folderList.count
+        switch HomeCollectionViewSection(rawValue: section) {
+        case .defaultList:
+            return HomeFilteredFolderCellType.allCases.count
+            
+        case .customList:
+            return viewModel.customFolderList.count
+            
+        default:
+            return 0
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifier,
-                                                            for: indexPath) as? HomeCollectionViewCell
-              else {
+        switch HomeCollectionViewSection(rawValue: indexPath.section) {
+        case .defaultList:
             
-            return HomeCollectionViewCell()
-        }
-        
-        if let cellType = HomeCollectionViewCellType(rawValue: indexPath.row) {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeDefaultListTypeCell.identifier,
+                                                                for: indexPath) as? HomeDefaultListTypeCell
+            else {
+                
+                return HomeDefaultListTypeCell()
+            }
             
-            cell.updateContent(type: cellType)
-        } else {
-            let data = folderList[indexPath.row - HomeCollectionViewCellType.allCases.count]
+            if let cellType = HomeFilteredFolderCellType(rawValue: indexPath.row) {
+                
+                cell.updateContent(type: cellType)
+            }
             
+            return cell
+            
+        case .customList:
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCustomListTypeCell.identifier,
+                                                                for: indexPath) as? HomeCustomListTypeCell
+            else {
+                
+                return HomeCustomListTypeCell()
+            }
+            
+            let data = viewModel.customFolderList[indexPath.row]
             cell.updateContent(data: data)
+            
+            return cell
+            
+        default:
+            return UICollectionViewCell()
         }
         
-        return cell
+        
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -291,15 +351,15 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
         
-        if let data = HomeCollectionViewCellType(rawValue: indexPath.row)?.data {
+        if let data = HomeFilteredFolderCellType(rawValue: indexPath.row)?.data {
             
             navigationController?.pushViewController(ListViewController(data: data,
-                                                                        type: HomeCollectionViewCellType(rawValue: indexPath.row)!),
+                                                                        type: HomeFilteredFolderCellType(rawValue: indexPath.row)!),
                                                      animated: true)
         } else {
-            let data = folderList[indexPath.row - HomeCollectionViewCellType.allCases.count]
-            navigationController?.pushViewController(ExtraTodoInFolderViewController(data: data),
-                                                     animated: true)
+            //            let data = folderList[indexPath.row - HomeFilteredFolderCellType.allCases.count]
+            //            navigationController?.pushViewController(ExtraTodoInFolderViewController(data: data),
+            //                                                     animated: true)
         }
     }
 }
@@ -309,7 +369,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return searchModel?.count ?? 0
+        return viewModel.searhResultList?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -319,8 +379,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             return ListTableViewCell()
         }
         
-        if let searchModel = searchModel {
-            let data = searchModel[indexPath.row]
+        if let data = viewModel.searhResultList?[indexPath.row] {
             cell.updateContent(data: data)
         }
         
@@ -334,27 +393,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 extension HomeViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let searchedData = DataBaseManager.shared.read(Todo.self).where {
-            $0.title.contains(searchText, options: .caseInsensitive) ||
-            $0.subTitle.contains(searchText, options: .caseInsensitive)
-        }
         
-        if searchText.isEmpty {
-            showTableOrCollectionView()
-            searchModel = nil
-        } else {
-            showTableOrCollectionView()
-            searchModel = searchedData
-        }
-        
-        searchResultTableView.reloadData()
-        
+        viewModel.applyUserInput(.searchTodo(searchText))
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
-        showTableOrCollectionView()
-        
+        viewModel.applyUserInput(.searchTodo(nil))
     }
     
 }

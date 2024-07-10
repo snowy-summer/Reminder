@@ -1,5 +1,5 @@
 //
-//  HomeCollectionViewCellType.swift
+//  HomeFilteredFolderCellType.swift
 //  Reminder
 //
 //  Created by 최승범 on 7/3/24.
@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-enum HomeCollectionViewCellType:Int, CaseIterable {
+enum HomeFilteredFolderCellType:Int, CaseIterable {
     case today
     case will
     case all

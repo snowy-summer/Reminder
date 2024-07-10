@@ -12,7 +12,7 @@ final class TitleHeaderView: UIView {
     
     private let titleLabel = UILabel()
     
-    init(type: HomeCollectionViewCellType) {
+    init(type: HomeFilteredFolderCellType) {
         super.init(frame: .zero)
         configureTitle()
         titleLabel.text = type.title

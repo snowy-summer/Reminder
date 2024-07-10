@@ -19,7 +19,7 @@ final class ListViewController: BaseViewController {
     }
     
     init(data: Results<Todo>,
-         type: HomeCollectionViewCellType) {
+         type: HomeFilteredFolderCellType) {
         self.model = data
         super.init(nibName: nil, bundle: nil)
         
@@ -109,7 +109,7 @@ extension ListViewController {
         return UIMenu(children: items)
     }
     
-    private func configureTableHeaderView(type: HomeCollectionViewCellType) {
+    private func configureTableHeaderView(type: HomeFilteredFolderCellType) {
         
         let headerView = TitleHeaderView(type: type)
         headerView.frame = CGRect(x: 0,

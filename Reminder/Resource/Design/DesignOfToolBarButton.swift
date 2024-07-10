@@ -14,7 +14,7 @@ enum ToolBarButtonType {
     var title: String {
         switch self {
         case .addTodo:
-            return "새로운 할 일 "
+            return "새로운 미리 알림 "
         case .addList:
             return "목록 추가"
         }

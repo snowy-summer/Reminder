@@ -18,7 +18,7 @@ final class ExtraTodoInFolderViewController: BaseViewController {
         }
     }
     
-    init(data: Folder) {
+    init(data: CustomTodoFolder) {
         self.model = data.todoList
         super.init(nibName: nil, bundle: nil)
         

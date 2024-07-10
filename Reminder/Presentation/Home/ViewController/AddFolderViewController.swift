@@ -65,9 +65,9 @@ extension AddFolderViewController {
         
         if let text = nameTextField.text,
            !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            let folder = Folder(name: text)
+//            let folder = CustomTodoFolder(name: text)
             
-            DataBaseManager.shared.add(folder)
+//            DataBaseManager.shared.add(folder)
         }
         
         dismiss(animated: true)
