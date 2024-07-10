@@ -225,8 +225,7 @@ extension HomeViewController {
         
         
         let nv = UINavigationController(rootViewController: AddFolderViewController())
-        nv.modalPresentationStyle = .fullScreen
-        
+        nv.navigationBar.backgroundColor = .clear
         present(nv, animated: true)
     }
     
@@ -235,7 +234,7 @@ extension HomeViewController {
         let vc = CalendarModal()
         vc.modalPresentationStyle = .pageSheet
         vc.showFilteredResult = { [weak self] value in
-            self?.showFilteredResult(date: value)
+            self?.viewModel.applyUserInput(.filteredDate(value))
         }
         if let sheet = vc.sheetPresentationController {
             
@@ -248,27 +247,9 @@ extension HomeViewController {
     }
     
     @objc private func showTableOrCollectionView() {
-        //        searchResultTableView.isHidden.toggle()
-        //        homeCollectionView.isHidden.toggle()
+       
     }
-    //
-    private func showFilteredResult(date: Date) {
-        
-        //        let calendar = Calendar.current
-        //        let yesterday = calendar.date(byAdding: .day, value: -1, to: date)!
-        //        let tomorrow = calendar.date(byAdding: .day, value: 1, to: date)!
-        //
-        //        let searchedData = DataBaseManager.shared.read(Todo.self).where {
-        //            $0.deadLine >= yesterday && $0.deadLine <= tomorrow
-        //        }
-        //
-        //        showTableOrCollectionView()
-        //        searchModel = searchedData
-        //
-        //        searchResultTableView.reloadData()
-        
-        
-    }
+
 }
 
 //MARK: - CollectionView Delegate, DataSource

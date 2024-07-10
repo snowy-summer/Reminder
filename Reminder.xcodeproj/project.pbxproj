@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		6B5A20AF2C369A3000179AEB /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5A20AE2C369A3000179AEB /* PhotoManager.swift */; };
 		6B5A20B12C369C2800179AEB /* EnrollVCModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5A20B02C369C2800179AEB /* EnrollVCModel.swift */; };
+		6B5DEDB52C3E8180002B458F /* TitleSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDB42C3E8180002B458F /* TitleSectionCell.swift */; };
+		6B5DEDB72C3E8192002B458F /* SelectColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDB62C3E8192002B458F /* SelectColorCollectionViewCell.swift */; };
+		6B5DEDB92C3E81A1002B458F /* SelectIconCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDB82C3E81A1002B458F /* SelectIconCollectionViewCell.swift */; };
+		6B5DEDBB2C3E8FA6002B458F /* DesignOfFolderColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDBA2C3E8FA6002B458F /* DesignOfFolderColor.swift */; };
+		6B5DEDBD2C3EBCE4002B458F /* ColorSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDBC2C3EBCE4002B458F /* ColorSectionCell.swift */; };
+		6B5DEDBF2C3EBF52002B458F /* IconSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDBE2C3EBF52002B458F /* IconSectionCell.swift */; };
+		6B5DEDC12C3EC886002B458F /* AddFolderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDC02C3EC886002B458F /* AddFolderSection.swift */; };
 		6B5EDDBE2C37B1D200D5667D /* CalendarModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5EDDBD2C37B1D200D5667D /* CalendarModal.swift */; };
 		6B5EDDC52C37E25B00D5667D /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5EDDC42C37E25B00D5667D /* Date+Extension.swift */; };
 		6B5EDDCC2C39695100D5667D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6B5EDDCB2C39695100D5667D /* SnapKit */; };
@@ -55,7 +62,7 @@
 		6BF3E1862C3E14C700F231FF /* HomeCollectionViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1852C3E14C700F231FF /* HomeCollectionViewSection.swift */; };
 		6BF3E18A2C3E227200F231FF /* HomeCustomListTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1892C3E227200F231FF /* HomeCustomListTypeCell.swift */; };
 		6BF3E1922C3E2C6000F231FF /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1912C3E2C6000F231FF /* HomeViewModel.swift */; };
-		6BF3E19A2C3E601E00F231FF /* DesignOfListIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1992C3E601D00F231FF /* DesignOfListIcon.swift */; };
+		6BF3E19A2C3E601E00F231FF /* DesignOfFolderIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1992C3E601D00F231FF /* DesignOfFolderIcon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -75,6 +82,13 @@
 /* Begin PBXFileReference section */
 		6B5A20AE2C369A3000179AEB /* PhotoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoManager.swift; sourceTree = "<group>"; };
 		6B5A20B02C369C2800179AEB /* EnrollVCModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrollVCModel.swift; sourceTree = "<group>"; };
+		6B5DEDB42C3E8180002B458F /* TitleSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleSectionCell.swift; sourceTree = "<group>"; };
+		6B5DEDB62C3E8192002B458F /* SelectColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectColorCollectionViewCell.swift; sourceTree = "<group>"; };
+		6B5DEDB82C3E81A1002B458F /* SelectIconCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectIconCollectionViewCell.swift; sourceTree = "<group>"; };
+		6B5DEDBA2C3E8FA6002B458F /* DesignOfFolderColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignOfFolderColor.swift; sourceTree = "<group>"; };
+		6B5DEDBC2C3EBCE4002B458F /* ColorSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSectionCell.swift; sourceTree = "<group>"; };
+		6B5DEDBE2C3EBF52002B458F /* IconSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconSectionCell.swift; sourceTree = "<group>"; };
+		6B5DEDC02C3EC886002B458F /* AddFolderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderSection.swift; sourceTree = "<group>"; };
 		6B5EDDBD2C37B1D200D5667D /* CalendarModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModal.swift; sourceTree = "<group>"; };
 		6B5EDDC42C37E25B00D5667D /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		6BE741E72C33DDAE009DEE99 /* Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,7 +133,7 @@
 		6BF3E1852C3E14C700F231FF /* HomeCollectionViewSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewSection.swift; sourceTree = "<group>"; };
 		6BF3E1892C3E227200F231FF /* HomeCustomListTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCustomListTypeCell.swift; sourceTree = "<group>"; };
 		6BF3E1912C3E2C6000F231FF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		6BF3E1992C3E601D00F231FF /* DesignOfListIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignOfListIcon.swift; sourceTree = "<group>"; };
+		6BF3E1992C3E601D00F231FF /* DesignOfFolderIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignOfFolderIcon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +150,64 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B5DEDAE2C3E80B4002B458F /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				6B5DEDB02C3E8123002B458F /* VC */,
+				6BF3E1902C3E2C4800F231FF /* ViewModel */,
+				6BE7424F2C35527D009DEE99 /* Cell */,
+				6BE742502C355283009DEE99 /* SectionAndType */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		6B5DEDAF2C3E80BA002B458F /* AddTodoFolder */ = {
+			isa = PBXGroup;
+			children = (
+				6B5DEDB12C3E813E002B458F /* VC */,
+				6B5DEDB22C3E8143002B458F /* ViewModel */,
+				6B5DEDB32C3E814A002B458F /* Cell */,
+			);
+			path = AddTodoFolder;
+			sourceTree = "<group>";
+		};
+		6B5DEDB02C3E8123002B458F /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				6BE7422E2C343ED8009DEE99 /* HomeViewController.swift */,
+				6B5EDDBD2C37B1D200D5667D /* CalendarModal.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		6B5DEDB12C3E813E002B458F /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				6BF3E16F2C3BC9FD00F231FF /* AddFolderViewController.swift */,
+				6B5DEDC02C3EC886002B458F /* AddFolderSection.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		6B5DEDB22C3E8143002B458F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		6B5DEDB32C3E814A002B458F /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				6B5DEDB42C3E8180002B458F /* TitleSectionCell.swift */,
+				6B5DEDBC2C3EBCE4002B458F /* ColorSectionCell.swift */,
+				6B5DEDBE2C3EBF52002B458F /* IconSectionCell.swift */,
+				6B5DEDB62C3E8192002B458F /* SelectColorCollectionViewCell.swift */,
+				6B5DEDB82C3E81A1002B458F /* SelectIconCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		6BE741DE2C33DDAE009DEE99 = {
 			isa = PBXGroup;
 			children = (
@@ -243,7 +315,8 @@
 			children = (
 				6BE742192C34089A009DEE99 /* DesignOfFont.swift */,
 				6BE742392C34ED3F009DEE99 /* DesignOfToolBarButton.swift */,
-				6BF3E1992C3E601D00F231FF /* DesignOfListIcon.swift */,
+				6BF3E1992C3E601D00F231FF /* DesignOfFolderIcon.swift */,
+				6B5DEDBA2C3E8FA6002B458F /* DesignOfFolderColor.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
@@ -261,10 +334,8 @@
 		6BE7422D2C343EC5009DEE99 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				6BE742512C355288009DEE99 /* ViewController */,
-				6BF3E1902C3E2C4800F231FF /* ViewModel */,
-				6BE742502C355283009DEE99 /* Type */,
-				6BE7424F2C35527D009DEE99 /* Cell */,
+				6B5DEDAE2C3E80B4002B458F /* Home */,
+				6B5DEDAF2C3E80BA002B458F /* AddTodoFolder */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -318,23 +389,13 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		6BE742502C355283009DEE99 /* Type */ = {
+		6BE742502C355283009DEE99 /* SectionAndType */ = {
 			isa = PBXGroup;
 			children = (
 				6BE7423B2C34EE75009DEE99 /* HomeFilteredFolderCellType.swift */,
-			);
-			path = Type;
-			sourceTree = "<group>";
-		};
-		6BE742512C355288009DEE99 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				6BE7422E2C343ED8009DEE99 /* HomeViewController.swift */,
-				6BF3E16F2C3BC9FD00F231FF /* AddFolderViewController.swift */,
-				6B5EDDBD2C37B1D200D5667D /* CalendarModal.swift */,
 				6BF3E1852C3E14C700F231FF /* HomeCollectionViewSection.swift */,
 			);
-			path = ViewController;
+			path = SectionAndType;
 			sourceTree = "<group>";
 		};
 		6BE742522C3552AA009DEE99 /* DataModel */ = {
@@ -475,6 +536,7 @@
 				6BE7421D2C3409B4009DEE99 /* UILabel+Extension.swift in Sources */,
 				6BE7423C2C34EE75009DEE99 /* HomeFilteredFolderCellType.swift in Sources */,
 				6BE742442C35217F009DEE99 /* PriorityEnrollViewController.swift in Sources */,
+				6B5DEDBF2C3EBF52002B458F /* IconSectionCell.swift in Sources */,
 				6BE7422F2C343ED8009DEE99 /* HomeViewController.swift in Sources */,
 				6BE742382C34EB46009DEE99 /* UIButton+Extension.swift in Sources */,
 				6BE742162C33FBD9009DEE99 /* Identifier+Extension.swift in Sources */,
@@ -484,13 +546,16 @@
 				6BE742402C352162009DEE99 /* DeadLineEnrollViewController.swift in Sources */,
 				6BE742262C34237A009DEE99 /* TitleAndMemoTableViewCell.swift in Sources */,
 				6BE742482C353A11009DEE99 /* PriorityType.swift in Sources */,
+				6B5DEDC12C3EC886002B458F /* AddFolderSection.swift in Sources */,
 				6BE742462C3532ED009DEE99 /* UITextField+Extension.swift in Sources */,
 				6BE7422C2C34310A009DEE99 /* UITextView+Extension.swift in Sources */,
 				6B5EDDBE2C37B1D200D5667D /* CalendarModal.swift in Sources */,
+				6B5DEDBB2C3E8FA6002B458F /* DesignOfFolderColor.swift in Sources */,
 				6BE742082C33F79B009DEE99 /* BaseCollectionViewCell.swift in Sources */,
 				6BF3E18A2C3E227200F231FF /* HomeCustomListTypeCell.swift in Sources */,
 				6BE7421A2C34089A009DEE99 /* DesignOfFont.swift in Sources */,
 				6B5A20B12C369C2800179AEB /* EnrollVCModel.swift in Sources */,
+				6B5DEDB72C3E8192002B458F /* SelectColorCollectionViewCell.swift in Sources */,
 				6BE741EB2C33DDAE009DEE99 /* AppDelegate.swift in Sources */,
 				6BE742312C344C2B009DEE99 /* NotificationName+Extension.swift in Sources */,
 				6BF3E1922C3E2C6000F231FF /* HomeViewModel.swift in Sources */,
@@ -502,15 +567,18 @@
 				6BE7423E2C3504B7009DEE99 /* HomeHeaderView.swift in Sources */,
 				6BF3E1702C3BC9FD00F231FF /* AddFolderViewController.swift in Sources */,
 				6BE7422A2C3425BD009DEE99 /* EnrollSections.swift in Sources */,
+				6B5DEDB92C3E81A1002B458F /* SelectIconCollectionViewCell.swift in Sources */,
 				6BE7421F2C340B6F009DEE99 /* TitleHeaderView.swift in Sources */,
+				6B5DEDB52C3E8180002B458F /* TitleSectionCell.swift in Sources */,
 				6BE7420E2C33F854009DEE99 /* DataBaseManager.swift in Sources */,
 				6BE741ED2C33DDAE009DEE99 /* SceneDelegate.swift in Sources */,
+				6B5DEDBD2C3EBCE4002B458F /* ColorSectionCell.swift in Sources */,
 				6BE742212C341B6E009DEE99 /* Todo.swift in Sources */,
 				6BF3E1862C3E14C700F231FF /* HomeCollectionViewSection.swift in Sources */,
 				6BE742332C34CC08009DEE99 /* HomeDefaultListTypeCell.swift in Sources */,
 				6BE742242C342090009DEE99 /* EnrollViewController.swift in Sources */,
 				6BE742112C33FAA6009DEE99 /* ListViewController.swift in Sources */,
-				6BF3E19A2C3E601E00F231FF /* DesignOfListIcon.swift in Sources */,
+				6BF3E19A2C3E601E00F231FF /* DesignOfFolderIcon.swift in Sources */,
 				6BF3E1722C3BD14100F231FF /* ExtraTodoInFolderViewController.swift in Sources */,
 				6BF3E16E2C3BC6B800F231FF /* CustomTodoFolder.swift in Sources */,
 			);
