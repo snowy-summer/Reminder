@@ -13,6 +13,7 @@ final class TitleSectionCell: BaseTableViewCell {
     private let iconCircleView = UIView()
     private let iconImageView = UIImageView()
     private let titleTextField = UITextField()
+    var texFieldChanged: ((String?) -> Void)?
     
     override func configureHierarchy() {
         
@@ -30,7 +31,9 @@ final class TitleSectionCell: BaseTableViewCell {
             iconCircleView.layer.cornerRadius = iconCircleView.frame.width / 2
         }
         
-        iconCircleView.backgroundColor = .blue
+        iconCircleView.backgroundColor = DesignOfFolderColor.blue.colorValue
+        iconCircleView.layer.shadowRadius = 16
+        iconCircleView.layer.shadowOpacity = 0.2
         iconImageView.image = UIImage(systemName: DesignOfFolderIcon.list.iconName)
         iconImageView.tintColor = .baseFont
         
@@ -59,6 +62,25 @@ final class TitleSectionCell: BaseTableViewCell {
             make.top.equalTo(iconCircleView.snp.bottom).offset(20)
             make.bottom.equalTo(contentView.snp.bottom).inset(20)
         }
+    }
+    
+    override func configureGestureAndButtonAction() {
+        titleTextField.addTarget(self,
+                                 action: #selector(textFieldDidChange),
+                                 for: .allEditingEvents)
+    }
+    
+    func updateContent(folderName: String?,
+                       iconName: String,
+                       color: UIColor) {
+        
+        titleTextField.text = folderName
+        iconCircleView.backgroundColor = color
+        iconImageView.image = UIImage(systemName: iconName)
+    }
+    
+    @objc private func textFieldDidChange(_ sender: UITextField) {
+        texFieldChanged?(sender.text)
     }
     
 }

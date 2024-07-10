@@ -9,10 +9,6 @@ import Foundation
 import Combine
 import RealmSwift
 
-//protocol ViewModelAble {
-////    enum InputType
-//}
-
 final class HomeViewModel {
     
     enum InputType {
@@ -93,8 +89,5 @@ final class HomeViewModel {
         }.store(in: &cancellable)
         
     }
-    
-    
-    
     
 }

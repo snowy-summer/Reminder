@@ -6,12 +6,23 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 final class IconSectionCell: BaseTableViewCell {
     
     private lazy var collecitionView = UICollectionView(frame: .zero,
                                                         collectionViewLayout: createCollectionViewLayout())
+    
+    private let viewModel = IconSectionCellViewModel()
+    private var cancellable = Set<AnyCancellable>()
+    var changeIcon: ((Int) -> Void)?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        bindOutput()
+    }
     
     override func configureHierarchy() {
         
@@ -51,6 +62,19 @@ final class IconSectionCell: BaseTableViewCell {
     }
 }
 
+//MARK: - Method
+extension IconSectionCell {
+    
+    private func bindOutput() {
+        
+        viewModel.$index.sink { [weak self] newValue in
+            guard let self = self else { return }
+            collecitionView.reloadData()
+            changeIcon?(newValue)
+        }.store(in: &cancellable)
+    }
+}
+
 //MARK: - CollectionView Delegate, DataSource
 extension IconSectionCell: UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -70,14 +94,16 @@ extension IconSectionCell: UICollectionViewDelegate, UICollectionViewDataSource 
             return SelectIconCollectionViewCell()
         }
         
-        cell.updateIcon(index: indexPath.row)
+        cell.updateIcon(index: indexPath.row,
+                        selectedIndex: viewModel.index)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        
+        viewModel.applyUserInput(.selectIcon(index: indexPath.row))
     }
 }
+
 

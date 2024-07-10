@@ -56,7 +56,13 @@ final class SelectIconCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
-    func updateIcon(index: Int) {
+    func updateIcon(index: Int, selectedIndex: Int) {
+        if index == selectedIndex {
+            selectView.isHidden = false
+        } else {
+            selectView.isHidden = true
+        }
+        
         guard let iconName = DesignOfFolderIcon(rawValue: index)?.iconName else { return }
         iconImageView.image = UIImage(systemName: iconName)
     }

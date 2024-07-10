@@ -6,12 +6,22 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 final class ColorSectionCell: BaseTableViewCell {
     
     private lazy var collecitionView = UICollectionView(frame: .zero,
                                                         collectionViewLayout: createCollectionViewLayout())
+    private let viewModel = ColorSectionCellViewModel()
+    private var cancellable = Set<AnyCancellable>()
+    var changeColor: ((Int) -> Void)?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        bindOutput()
+    }
     
     override func configureHierarchy() {
         
@@ -51,6 +61,19 @@ final class ColorSectionCell: BaseTableViewCell {
     }
 }
 
+//MARK: - Method
+extension ColorSectionCell {
+    
+    private func bindOutput() {
+        
+        viewModel.$index.sink { [weak self] newValue in
+            guard let self = self else { return }
+            collecitionView.reloadData()
+            changeColor?(newValue)
+        }.store(in: &cancellable)
+    }
+}
+
 //MARK: - CollectionView Delegate, DataSource
 extension ColorSectionCell: UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -70,13 +93,14 @@ extension ColorSectionCell: UICollectionViewDelegate, UICollectionViewDataSource
             return SelectColorCollectionViewCell()
         }
         
-        cell.updateColor(index: indexPath.row)
+        cell.updateColor(index: indexPath.row,
+                         selectedIndex: viewModel.index)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        
+        viewModel.applyUserInput(.selectColor(index: indexPath.row))
     }
 }

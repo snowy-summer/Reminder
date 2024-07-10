@@ -6,31 +6,39 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 final class AddFolderViewController: BaseViewController {
     
     private let addTableView = UITableView(frame: .zero,
                                            style: .insetGrouped)
+    private var saveButtonItem: UIBarButtonItem!
+    
+    private let viewModel = AddFolderViewModel()
+    private var cancellable = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        bindingOutput()
     }
     
     override func configureNavigationBar() {
         
-        let saveItem = UIBarButtonItem(title: "완료",
-                                       style: .plain,
-                                       target: self,
-                                       action: #selector(saveFolder))
+        saveButtonItem = UIBarButtonItem(title: "완료",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(saveFolder))
+        saveButtonItem.isEnabled = false
         
         let dismissItem = UIBarButtonItem(title: "취소",
-                                       style: .plain,
-                                       target: self,
-                                       action: #selector(dismissVC))
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(dismissVC))
         
         
-        navigationItem.rightBarButtonItem = saveItem
+        navigationItem.rightBarButtonItem = saveButtonItem
         navigationItem.leftBarButtonItem = dismissItem
         navigationItem.title = "새로운 목록"
         navigationController?.navigationBar.backgroundColor = .modalBackground
@@ -70,12 +78,42 @@ final class AddFolderViewController: BaseViewController {
 //MARK: - Method
 extension AddFolderViewController {
     
+    private func bindingOutput() {
+        
+        viewModel.$folderName.sink { [weak self] newFolderName in
+            guard let self = self else { return }
+            
+            if newFolderName != nil {
+                saveButtonItem.isEnabled = true
+            } else {
+                saveButtonItem.isEnabled = false
+            }
+        }.store(in: &cancellable)
+        
+        viewModel.$iconColor.receive(on: DispatchQueue.main)
+            .sink { [weak self] newFolderColor in
+            guard let self = self else { return }
+            
+            addTableView.reloadSections(IndexSet(integer: AddFolderSection.title.rawValue),
+                                        with: .none)
+            
+        }.store(in: &cancellable)
+        
+        viewModel.$iconName.receive(on: DispatchQueue.main)
+            .sink { [weak self] newFolderIconName in
+            guard let self = self else { return }
+            
+            addTableView.reloadSections(IndexSet(integer: AddFolderSection.title.rawValue),
+                                        with: .none)
+        }.store(in: &cancellable)
+    }
+    
     @objc private func dismissVC() {
+        
         dismiss(animated: true)
     }
     
     @objc private func saveFolder() {
-        
         
         dismiss(animated: true)
         
@@ -122,12 +160,27 @@ extension AddFolderViewController: UITableViewDelegate, UITableViewDataSource {
                 return TitleSectionCell()
             }
             
+            cell.texFieldChanged = { [weak self] textValue in
+                guard let self = self else { return }
+
+                viewModel.applyUserInput(.writeFolderName(folderName: textValue))
+            }
+            
+            cell.updateContent(folderName: viewModel.folderName,
+                               iconName: viewModel.iconName,
+                               color: viewModel.iconColor)
+            
             return cell
             
         case .selectColor:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ColorSectionCell.identifier,
                                                            for: indexPath) as? ColorSectionCell else {
                 return ColorSectionCell()
+            }
+            
+            cell.changeColor = {[weak self] newValue in
+                guard let self = self else { return }
+                viewModel.applyUserInput(.selectColor(index: newValue))
             }
             
             return cell
@@ -138,13 +191,17 @@ extension AddFolderViewController: UITableViewDelegate, UITableViewDataSource {
                 return IconSectionCell()
             }
             
+            cell.changeIcon = {[weak self] newValue in
+                guard let self = self else { return }
+                viewModel.applyUserInput(.selectIcon(index: newValue))
+            }
+            
             return cell
             
         default:
             return UITableViewCell()
             
         }
-        
         
     }
     

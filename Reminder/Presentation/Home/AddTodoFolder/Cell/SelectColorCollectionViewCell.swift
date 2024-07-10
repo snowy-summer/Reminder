@@ -46,8 +46,12 @@ final class SelectColorCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
-    func updateColor(index: Int) {
-        
+    func updateColor(index: Int, selectedIndex: Int) {
+        if index == selectedIndex {
+            selectView.isHidden = false
+        } else {
+            selectView.isHidden = true
+        }
         colorView.backgroundColor = DesignOfFolderColor(rawValue: index)?.colorValue
     }
 }
