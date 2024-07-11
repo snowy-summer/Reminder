@@ -115,8 +115,10 @@ extension AddFolderViewController {
     
     @objc private func saveFolder() {
         
-        dismiss(animated: true)
-        
+        viewModel.applyUserInput(.saveFolder)
+        dismiss(animated: true) {
+            NotificationCenter.default.post(name: .updateHomeNotification, object: nil)
+        }
     }
 }
 
@@ -133,13 +135,13 @@ extension AddFolderViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch AddFolderSection(rawValue: indexPath.section) {
         case .title:
-            return height * 0.24
+            return  height * 0.24
             
         case .selectColor:
             return height * 0.16
             
         case .selectIcon:
-            return height * 0.36
+            return height * 0.4
             
         default:
             return 44

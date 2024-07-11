@@ -12,7 +12,7 @@ final class SelectColorCollectionViewCell: BaseCollectionViewCell {
     
     private let colorView = UIView()
     private let selectView = UIView()
-    
+
     override func configureHierarchy() {
         
         contentView.addSubview(selectView)
@@ -44,6 +44,7 @@ final class SelectColorCollectionViewCell: BaseCollectionViewCell {
         colorView.snp.makeConstraints { make in
             make.directionalEdges.equalTo(selectView).inset(6)
         }
+    
     }
     
     func updateColor(index: Int, selectedIndex: Int) {

@@ -18,6 +18,7 @@ final class HomeViewModel {
         case addNewTodo
         case addNewCustomFolder
         case customFolderClicked(Int)
+        case deleteCustomFolder(Int)
         case searchTodo(String?)
         case filteredDate(Date)
     }
@@ -43,51 +44,82 @@ final class HomeViewModel {
             switch inputType {
             case .none:
                 return
+                
             case .viewDidLoad:
-                customFolderList = Array(DataBaseManager.shared.read(CustomTodoFolder.self))
+                readCustomFolder()
+                
             case .filteredFolderClicked(let int):
                 return
+                
             case .addNewTodo:
                 return
+                
             case .addNewCustomFolder:
-            return
-            case .customFolderClicked(let int):
+                readCustomFolder()
+                
+            case .customFolderClicked(let index):
                 return
+                
+            case .deleteCustomFolder(let index):
+                deleteFolder(index: index)
+                
             case .searchTodo(let keyword):
+                searchTodo(keyword: keyword)
                 
-                guard let keyword = keyword else {
-                    searhResultList = nil
-                    return
-                }
-                
-                if keyword.isEmpty {
-                    searhResultList = nil
-                } else {
-                    print(keyword)
-                   let searhResult = DataBaseManager.shared.read(Todo.self).where {
-                        $0.title.contains(keyword,
-                                          options: .caseInsensitive) 
-                        || $0.subTitle.contains(keyword,
-                                                options: .caseInsensitive)
-                    }
-                    
-                    searhResultList = Array(searhResult)
-                }
             case .filteredDate(let date):
-                
-                let calendar = Calendar.current
-                let yesterday = calendar.date(byAdding: .day, value: -1, to: date)!
-                let tomorrow = calendar.date(byAdding: .day, value: 1, to: date)!
-                
-                let searchedData = DataBaseManager.shared.read(Todo.self).where {
-                    $0.deadLine >= yesterday && $0.deadLine <= tomorrow
-                }
-                
-                searhResultList = Array(searchedData)
+                filterDate(date: date)
                 
             }
         }.store(in: &cancellable)
         
+    }
+    
+}
+
+extension HomeViewModel {
+    
+    private func readCustomFolder() {
+        customFolderList = Array(DataBaseManager.shared.read(CustomTodoFolder.self))
+    }
+    
+    private func filterDate(date: Date) {
+        
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: date)!
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: date)!
+        
+        let searchedData = DataBaseManager.shared.read(Todo.self).where {
+            $0.deadLine >= yesterday && $0.deadLine <= tomorrow
+        }
+        
+        searhResultList = Array(searchedData)
+    }
+    
+    private func deleteFolder(index: Int) {
+        let folder = customFolderList[index]
+        customFolderList.remove(at: index)
+        DataBaseManager.shared.delete(folder)
+    }
+    
+    private func searchTodo(keyword: String?) {
+        
+        guard let keyword = keyword else {
+            searhResultList = nil
+            return
+        }
+        
+        if keyword.isEmpty {
+            searhResultList = nil
+        } else {
+            let searhResult = DataBaseManager.shared.read(Todo.self).where {
+                $0.title.contains(keyword,
+                                  options: .caseInsensitive)
+                || $0.subTitle.contains(keyword,
+                                        options: .caseInsensitive)
+            }
+            
+            searhResultList = Array(searhResult)
+        }
     }
     
 }

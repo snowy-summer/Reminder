@@ -81,8 +81,8 @@ final class HomeViewController: BaseViewController {
         
         homeCollectionView.register(HomeDefaultListTypeCell.self,
                                     forCellWithReuseIdentifier: HomeDefaultListTypeCell.identifier)
-        homeCollectionView.register(HomeCustomListTypeCell.self,
-                                    forCellWithReuseIdentifier: HomeCustomListTypeCell.identifier)
+        homeCollectionView.register(HomeCustomFolderTypeCell.self,
+                                    forCellWithReuseIdentifier: HomeCustomFolderTypeCell.identifier)
         
         homeCollectionView.register(HomeHeaderView.self,
                                     forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -152,7 +152,7 @@ final class HomeViewController: BaseViewController {
                                                object: nil)
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateCollectionView),
+                                               selector: #selector(addCustomFolder),
                                                name: .updateHomeNotification,
                                                object: nil)
     }
@@ -162,8 +162,60 @@ final class HomeViewController: BaseViewController {
         let collectioViewCompositonalLayout = UICollectionViewCompositionalLayout {
             (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             
+            switch HomeCollectionViewSection(rawValue: sectionIndex) {
+                
+            case .defaultList:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
+                                                      heightDimension: .fractionalHeight(1.0))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 8,
+                                                             leading: 8,
+                                                             bottom: 8,
+                                                             trailing: 8)
+                
+                
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                       heightDimension: .fractionalHeight(0.15))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                               subitems: [item])
+                
+                let section = NSCollectionLayoutSection(group: group)
+                
+                section.contentInsets = NSDirectionalEdgeInsets(top: 16,
+                                                                leading: 16,
+                                                                bottom: 16,
+                                                                trailing: 16)
+                return section
+                
+            case .customList:
+                var layoutConfiguration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+                
+                layoutConfiguration.trailingSwipeActionsConfigurationProvider = { indexPath in
+                    
+                    
+                    let deleteAction = UIContextualAction(style: .normal,
+                                                          title: nil) { [weak self] action, view, completion in
+                        guard let self = self else { return }
+                        
+                        viewModel.applyUserInput(.deleteCustomFolder(indexPath.row))
             
-            return HomeCollectionViewSection(rawValue: sectionIndex)?.layoutSection(environment: layoutEnvironment)
+                    }
+                    
+                    deleteAction.image = UIImage(systemName: "trash.fill")
+                    deleteAction.backgroundColor = .red
+                    
+                    let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+                    configuration.performsFirstActionWithFullSwipe = false
+                    
+                    return configuration
+                }
+                
+                return .list(using: layoutConfiguration,
+                             layoutEnvironment: layoutEnvironment)
+                
+            default:
+                return nil
+            }
         }
         
         return collectioViewCompositonalLayout
@@ -177,32 +229,32 @@ extension HomeViewController {
         
         viewModel.$customFolderList.receive(on:DispatchQueue.main)
             .sink { [weak self] _ in
-            guard let self = self else { return }
-            
-            homeCollectionView.reloadSections(IndexSet(integer: HomeCollectionViewSection.customList.rawValue))
-        }.store(in: &cancellable)
+                guard let self = self else { return }
+                
+                homeCollectionView.reloadSections(IndexSet(integer: HomeCollectionViewSection.customList.rawValue))
+            }.store(in: &cancellable)
         
         viewModel.$searhResultList.receive(on:DispatchQueue.main)
             .sink { [weak self] value in
-            guard let self = self else { return }
-            
-            guard let value = value else {
-                searchResultTableView.isHidden = true
-                homeCollectionView.isHidden = false
-                return
-            }
-            
+                guard let self = self else { return }
+                
+                guard let _ = value else {
+                    searchResultTableView.isHidden = true
+                    homeCollectionView.isHidden = false
+                    return
+                }
+                
                 searchResultTableView.isHidden = false
                 homeCollectionView.isHidden = true
                 searchResultTableView.reloadData()
-        
-        }.store(in: &cancellable)
+                
+            }.store(in: &cancellable)
         
     }
     
-    @objc private func updateCollectionView() {
+    @objc private func addCustomFolder() {
         
-        homeCollectionView.reloadData()
+        viewModel.applyUserInput(.addNewCustomFolder)
     }
     
     @objc private func pushListViewController() {
@@ -247,9 +299,9 @@ extension HomeViewController {
     }
     
     @objc private func showTableOrCollectionView() {
-       
+        
     }
-
+    
 }
 
 //MARK: - CollectionView Delegate, DataSource
@@ -297,11 +349,11 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         case .customList:
             
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCustomListTypeCell.identifier,
-                                                                for: indexPath) as? HomeCustomListTypeCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCustomFolderTypeCell.identifier,
+                                                                for: indexPath) as? HomeCustomFolderTypeCell
             else {
                 
-                return HomeCustomListTypeCell()
+                return HomeCustomFolderTypeCell()
             }
             
             let data = viewModel.customFolderList[indexPath.row]

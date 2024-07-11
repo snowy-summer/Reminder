@@ -10,15 +10,13 @@ import SnapKit
 
 final class SelectIconCollectionViewCell: BaseCollectionViewCell {
     
-    private let iconCircleView = UIView()
-    private let iconImageView = UIImageView()
+    private let iconCircleView = IconCircleView()
     private let selectView = UIView()
     
     override func configureHierarchy() {
         
         contentView.addSubview(selectView)
         contentView.addSubview(iconCircleView)
-        iconCircleView.addSubview(iconImageView)
     }
     
     override func configureUI() {
@@ -31,12 +29,9 @@ final class SelectIconCollectionViewCell: BaseCollectionViewCell {
         
         iconCircleView.backgroundColor = .iconBaseBackgroud
         
-        iconImageView.tintColor = .baseFont
-        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             selectView.layer.cornerRadius = selectView.frame.width / 2
-            iconCircleView.layer.cornerRadius = iconCircleView.frame.width / 2
         }
     }
     
@@ -50,10 +45,6 @@ final class SelectIconCollectionViewCell: BaseCollectionViewCell {
             make.directionalEdges.equalTo(selectView).inset(6)
         }
         
-        iconImageView.snp.makeConstraints { make in
-            make.center.equalTo(iconCircleView.snp.center)
-            make.width.height.equalTo(iconCircleView.snp.width).multipliedBy(0.6)
-        }
     }
     
     func updateIcon(index: Int, selectedIndex: Int) {
@@ -64,6 +55,6 @@ final class SelectIconCollectionViewCell: BaseCollectionViewCell {
         }
         
         guard let iconName = DesignOfFolderIcon(rawValue: index)?.iconName else { return }
-        iconImageView.image = UIImage(systemName: iconName)
+        iconCircleView.updateContent(iconName: iconName, color: .iconBaseBackgroud)
     }
 }

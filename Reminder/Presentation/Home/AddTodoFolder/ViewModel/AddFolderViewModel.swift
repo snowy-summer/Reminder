@@ -15,6 +15,7 @@ final class AddFolderViewModel {
         case selectColor(index: Int)
         case selectIcon(index: Int)
         case writeFolderName(folderName: String?)
+        case saveFolder
     }
     
     @Published private(set) var folderName: String? = nil
@@ -63,6 +64,17 @@ final class AddFolderViewModel {
                     folderName = nil
                 }
                 
+            case .saveFolder:
+                guard let colorComponent = iconColor.component,
+                      let folderName = folderName else { return }
+                
+                let folder = CustomTodoFolder(name: folderName,
+                                              iconName: iconName,
+                                              red: colorComponent.0,
+                                              green: colorComponent.1,
+                                              blue: colorComponent.2)
+                DataBaseManager.shared.add(folder)
+                return
             }
             
         }.store(in: &cancellable)
