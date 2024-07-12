@@ -11,12 +11,12 @@ import Combine
 final class IconSectionCellViewModel {
     
     enum InputType {
-        case none
+        case noValue
         case selectIcon(index: Int)
     }
     
     @Published private(set) var index = DesignOfFolderIcon.list.rawValue
-    @Published private var input: InputType = .none
+    @Published private var input: InputType = .noValue
     private var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -33,7 +33,7 @@ final class IconSectionCellViewModel {
             guard let self = self else { return }
             
             switch inputType {
-            case .none:
+            case .noValue:
                 return
                 
             case .selectIcon(index: let index):

@@ -10,13 +10,23 @@ import SnapKit
 
 final class SelectIconCollectionViewCell: BaseCollectionViewCell {
     
-    private let iconCircleView = IconCircleView()
+    private let iconCircleView = IconView()
     private let selectView = UIView()
     
     override func configureHierarchy() {
         
         contentView.addSubview(selectView)
         contentView.addSubview(iconCircleView)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        iconCircleView.layoutIfNeeded()
+        selectView.layoutIfNeeded()
+        
+        iconCircleView.layer.cornerRadius = iconCircleView.frame.width / 2
+        selectView.layer.cornerRadius = selectView.frame.width / 2
     }
     
     override func configureUI() {
@@ -28,11 +38,7 @@ final class SelectIconCollectionViewCell: BaseCollectionViewCell {
         selectView.isHidden = true
         
         iconCircleView.backgroundColor = .iconBaseBackgroud
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            selectView.layer.cornerRadius = selectView.frame.width / 2
-        }
+    
     }
     
     override func configureLayout() {

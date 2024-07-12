@@ -1,5 +1,5 @@
 //
-//  IconCircleView.swift
+//  IconView.swift
 //  Reminder
 //
 //  Created by 최승범 on 7/11/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class IconCircleView: UIView {
+final class IconView: UIView {
     
     private let iconImageView = UIImageView()
     
@@ -26,12 +26,6 @@ final class IconCircleView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        layer.cornerRadius = frame.width / 2
-    }
-    
     func updateContent(iconName: String,
                        color: UIColor) {
         
@@ -42,7 +36,7 @@ final class IconCircleView: UIView {
 }
 
 // MARK: - Configuration
-extension IconCircleView {
+extension IconView {
     
     private func configureHierarchy() {
         

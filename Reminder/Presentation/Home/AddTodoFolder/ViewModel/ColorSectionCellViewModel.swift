@@ -11,12 +11,12 @@ import Combine
 final class ColorSectionCellViewModel {
     
     enum InputType {
-        case none
+        case noValue
         case selectColor(index: Int)
     }
     
     @Published private(set) var index = DesignOfFolderColor.blue.rawValue
-    @Published private var input: InputType = .none
+    @Published private var input: InputType = .noValue
     private var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -33,7 +33,7 @@ final class ColorSectionCellViewModel {
             guard let self = self else { return }
             
             switch inputType {
-            case .none:
+            case .noValue:
                 return
                 
             case .selectColor(index: let index):

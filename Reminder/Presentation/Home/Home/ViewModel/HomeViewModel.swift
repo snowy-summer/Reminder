@@ -12,7 +12,7 @@ import RealmSwift
 final class HomeViewModel {
     
     enum InputType {
-        case none
+        case noValue
         case viewDidLoad
         case filteredFolderClicked(Int)
         case addNewTodo
@@ -25,7 +25,7 @@ final class HomeViewModel {
     
     @Published private(set) var searhResultList: [Todo]? = nil
     @Published private(set) var customFolderList = [CustomTodoFolder]()
-    @Published private var input: InputType = .none
+    @Published private var input: InputType = .noValue
     private var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -42,7 +42,7 @@ final class HomeViewModel {
             guard let self = self else { return }
             
             switch inputType {
-            case .none:
+            case .noValue:
                 return
                 
             case .viewDidLoad:

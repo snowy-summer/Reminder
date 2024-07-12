@@ -10,7 +10,7 @@ import SnapKit
 
 final class HomeCustomFolderTypeCell: BaseCollectionViewCell {
     
-    private let iconCircleView = IconCircleView()
+    private let iconCircleView = IconView()
     private let titleLabel = UILabel()
     private let countLabel = UILabel()
     private let nextButtonImageView = UIImageView()
@@ -18,6 +18,13 @@ final class HomeCustomFolderTypeCell: BaseCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        iconCircleView.layoutIfNeeded()
+        iconCircleView.layer.cornerRadius = iconCircleView.frame.width / 2
     }
     
     override func configureHierarchy() {

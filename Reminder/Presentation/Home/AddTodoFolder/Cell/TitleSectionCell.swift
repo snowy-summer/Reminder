@@ -10,9 +10,15 @@ import SnapKit
 
 final class TitleSectionCell: BaseTableViewCell {
     
-    private let iconCircleView = IconCircleView()
+    private let iconCircleView = IconView()
     private let titleTextField = UITextField()
     var texFieldChanged: ((String?) -> Void)?
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        iconCircleView.layer.cornerRadius = iconCircleView.frame.width / 2
+    }
     
     override func configureHierarchy() {
         

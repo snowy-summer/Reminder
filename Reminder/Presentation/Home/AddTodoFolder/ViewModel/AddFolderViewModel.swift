@@ -11,7 +11,7 @@ import Combine
 final class AddFolderViewModel {
     
     enum InputType {
-        case none
+        case noValue
         case selectColor(index: Int)
         case selectIcon(index: Int)
         case writeFolderName(folderName: String?)
@@ -21,7 +21,7 @@ final class AddFolderViewModel {
     @Published private(set) var folderName: String? = nil
     @Published private(set) var iconColor = DesignOfFolderColor.blue.colorValue
     @Published private(set) var iconName = DesignOfFolderIcon.list.iconName
-    @Published private var input: InputType = .none
+    @Published private var input: InputType = .noValue
     private var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -38,7 +38,7 @@ final class AddFolderViewModel {
             guard let self = self else { return }
             
             switch inputType {
-            case .none:
+            case .noValue:
                 return
                 
             case .selectColor(index: let index):

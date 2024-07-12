@@ -268,7 +268,6 @@ extension HomeViewController {
     @objc private func addTodo() {
         
         let nv = UINavigationController(rootViewController: EnrollViewController())
-        nv.modalPresentationStyle = .fullScreen
         
         present(nv, animated: true)
     }
