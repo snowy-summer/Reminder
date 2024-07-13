@@ -16,13 +16,13 @@ final class TagListTableViewCell: BaseTableViewCell {
     private let tagTextField = UITextField()
     private let addTagButton = UIButton()
     
-    private let viewModel = TagViewModel()
+    weak var viewModel: EnrollViewModel?
+    
     private var cancellable = Set<AnyCancellable>()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        bindingOutput()
     }
     
     override func configureHierarchy() {
@@ -44,10 +44,12 @@ final class TagListTableViewCell: BaseTableViewCell {
                                    forCellWithReuseIdentifier: TagCell.identifier)
         
         tagTextField.layer.cornerRadius = 8
-        tagTextField.backgroundColor = .iconBaseBackgroud
         tagTextField.layer.cornerCurve = .continuous
+        tagTextField.backgroundColor = .iconBaseBackgroud
         tagTextField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
         tagTextField.leftViewMode = .always
+        tagTextField.placeholder = "태그를 입력해주세요"
+        tagTextField.delegate = self
         
         addTagButton.backgroundColor = .iconBaseBackgroud
         addTagButton.setTitle("추가", for: .normal)
@@ -58,26 +60,26 @@ final class TagListTableViewCell: BaseTableViewCell {
     
     override func configureLayout() {
         
-        tagCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top).offset(8)
-            make.directionalHorizontalEdges.equalTo(contentView.snp.directionalHorizontalEdges).inset(16)
-            make.height.equalTo(60)
-        }
-        
         tagTextField.snp.makeConstraints { make in
-            make.top.equalTo(tagCollectionView.snp.bottom).offset(8)
-            make.leading.equalTo(tagCollectionView.snp.leading)
+            make.leading.equalTo(contentView.snp.leading).inset(16)
             make.height.equalTo(44)
             make.bottom.equalTo(contentView.snp.bottom).inset(8)
         }
         
         addTagButton.snp.makeConstraints { make in
-            make.top.equalTo(tagCollectionView.snp.bottom).offset(8)
             make.leading.equalTo(tagTextField.snp.trailing).offset(8)
-            make.trailing.equalTo(tagCollectionView.snp.trailing)
+            make.trailing.equalTo(contentView.snp.trailing).inset(16)
+            make.bottom.equalTo(contentView.snp.bottom).inset(8)
             make.height.equalTo(44)
             make.width.equalTo(60)
         }
+        
+        tagCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top).offset(8)
+            make.directionalHorizontalEdges.equalTo(contentView.snp.directionalHorizontalEdges).inset(16)
+            make.bottom.equalTo(tagTextField.snp.top).inset(-20)
+        }
+        
     }
     
     override func configureGestureAndButtonAction() {
@@ -88,15 +90,14 @@ final class TagListTableViewCell: BaseTableViewCell {
     }
 
     private func createCollectionViewLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize( widthDimension: .estimated(1.0),
+        let itemSize = NSCollectionLayoutSize( widthDimension: .estimated(100),
                                                heightDimension: .estimated(44))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(4),
                                                          top: .none,
                                                          trailing: .fixed(4),
                                                          bottom: .none)
-        //TODO: - 제약 조건 문제
-
+        
         let groupSize = NSCollectionLayoutSize( widthDimension: .fractionalWidth(1.0),
                                                 heightDimension: .estimated(44))
         let group = NSCollectionLayoutGroup.horizontal( layoutSize: groupSize,
@@ -117,30 +118,22 @@ final class TagListTableViewCell: BaseTableViewCell {
 
 extension TagListTableViewCell {
     
-    private func bindingOutput() {
-        
-        viewModel.$tagList.receive(on: DispatchQueue.main)
-            .sink { [weak self]  _ in
-            guard let self = self else { return }
-            
-            tagCollectionView.reloadData()
-                if !viewModel.tagList.isEmpty {
-                    tagCollectionView.snp.updateConstraints { [weak self] make in
-                        make.height.equalTo((self?.tagCollectionView.contentSize.height)! + 8)
-                    }
-                }
-        }.store(in: &cancellable)
+    func bindingOutput() {
+        viewModel?.$tagList.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                tagCollectionView.reloadData()
+                
+            }.store(in: &cancellable)
     }
     
     @objc private func addTag() {
         
-        viewModel.applyInput(input: .addTag(tagTextField.text))
+        viewModel?.applyInput(.addTag(tagTextField.text))
+        tagTextField.text = .none
     }
     
-    func updateContent(tags: [String]) {
-
-        viewModel.applyInput(input: .readTag(tags))
-    }
 }
 
 //MARK: - CollectionViewDelegate, Datsource
@@ -149,7 +142,7 @@ extension TagListTableViewCell: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
 
-        return viewModel.tagList.count
+        return viewModel?.tagList.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -160,8 +153,9 @@ extension TagListTableViewCell: UICollectionViewDelegate, UICollectionViewDataSo
             return TagCell()
         }
         
-        let title = viewModel.tagList[indexPath.row]
-        cell.updateContent(title: title)
+        if let title = viewModel?.tagList[indexPath.row] {
+            cell.updateContent(title: title)
+        }
         
         return cell
     }
@@ -169,7 +163,17 @@ extension TagListTableViewCell: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
         
-        viewModel.applyInput(input: .removeTag(indexPath.row))
+        viewModel?.applyInput(.removeTag(indexPath.row))
+    }
+    
+}
+
+extension TagListTableViewCell: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        addTag()
+        
+        return true
     }
     
 }

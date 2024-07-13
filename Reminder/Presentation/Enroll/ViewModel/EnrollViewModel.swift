@@ -23,6 +23,8 @@ final class EnrollViewModel {
         
         case expandTagCell
         case updateTags([String])
+        case addTag(String?)
+        case removeTag(Int)
         
         case pinTogle
         
@@ -36,6 +38,7 @@ final class EnrollViewModel {
     
     private(set) var todo = Todo(title: "")
     private var folder: CustomTodoFolder?
+    
     @Published private(set) var deadLine: Date?
     @Published private(set) var isDateExpand = false
     @Published private(set) var tagList = [String]()
@@ -79,6 +82,12 @@ final class EnrollViewModel {
                 
             case .updateTags(let tags):
                 updateTags(tags: tags)
+                
+            case .addTag(let tag):
+                addTag(tag: tag)
+                
+            case .removeTag(let index):
+                removeTag(index: index)
 //MARK: - 깃발
             case .pinTogle:
                 pinToggle()
@@ -87,13 +96,15 @@ final class EnrollViewModel {
                 addImage(imageName: imageName)
                 
             case .saveTodo:
-                return
+                saveTodo()
+          
             }
             
         }.store(in: &cancellable)
     }
 }
 
+//MARK: - Title, SubTitle
 extension EnrollViewModel {
     
     private func updateTitle(text: String?) {
@@ -113,24 +124,23 @@ extension EnrollViewModel {
         
         todo.subTitle = text
     }
+}
+
+//MARK: - Date
+extension EnrollViewModel {
     
     private func updateDate(date: Date?) {
-        
         deadLine = date
-        todo.deadLine = date
     }
     
     private func expandDateCell() {
         isDateExpand.toggle()
-        
-        if isDateExpand == false {
-            todo.deadLine = nil
-        }
     }
     
-    private func updatePriority(value: Int?) {
-        todo.priority = value
-    }
+}
+
+//MARK: - 태그
+extension EnrollViewModel {
     
     private func expandTagCell() {
         isTagExpand.toggle()
@@ -146,6 +156,30 @@ extension EnrollViewModel {
         tagList = tags
     }
     
+    private func addTag(tag: String?) {
+        
+        guard let text = tag else { return }
+        
+        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+            tagList.contains(text) {
+            return
+        }
+        let tagText = "#" + text
+        tagList.append(tagText)
+    }
+    
+    private func removeTag(index: Int) {
+        tagList.remove(at: index)
+    }
+}
+
+//MARK: - pin, image, priority
+extension EnrollViewModel {
+    
+    private func updatePriority(value: Int?) {
+        todo.priority = value
+    }
+    
     private func pinToggle() {
         todo.isPined.toggle()
     }
@@ -155,6 +189,16 @@ extension EnrollViewModel {
     }
     
     private func saveTodo() {
+        
+        if isDateExpand {
+            todo.deadLine = deadLine
+        }
+        
+        if isTagExpand {
+            tagList.forEach { value in
+                todo.tag.append(value)
+            }
+        }
         
         if let folder = folder {
             DataBaseManager.shared.update(folder) { [weak self] folder in

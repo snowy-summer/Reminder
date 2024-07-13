@@ -19,7 +19,7 @@ final class TagCell: BaseCollectionViewCell {
     
     override func configureUI() {
         
-        contentView.layer.cornerRadius = 8
+        contentView.layer.cornerRadius = 4
         contentView.backgroundColor = #colorLiteral(red: 0.2239803374, green: 0.511967957, blue: 1, alpha: 1)
     }
     

@@ -33,7 +33,6 @@ final class HomeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        configureNavigationBar()
     }
     
     deinit {
@@ -276,7 +275,6 @@ extension HomeViewController {
         
         
         let nv = UINavigationController(rootViewController: AddFolderViewController())
-        nv.navigationBar.backgroundColor = .clear
         present(nv, animated: true)
     }
     

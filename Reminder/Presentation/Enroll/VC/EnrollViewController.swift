@@ -120,13 +120,6 @@ extension EnrollViewController {
                                                with: .automatic)
             }.store(in: &cancellables)
         
-        viewModel.$tagList.receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                
-                enrollTableView.reloadSections(IndexSet(integer: EnrollSections.tag.rawValue),
-                                               with: .automatic)
-            }.store(in: &cancellables)
     }
     
     @objc private func cancelButtonAction() {
@@ -137,6 +130,7 @@ extension EnrollViewController {
     @objc private func saveButtonAction() {
         
         viewModel.applyInput(.saveTodo)
+        dismiss(animated: true)
     }
     
 }
@@ -182,7 +176,19 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             
             return view.frame.height * 0.1
             
+        case .tag:
+            
+            if indexPath.row == 0 {
+                return 60
+            }
+            
+            return view.frame.height * 0.3
+            
         default:
+            
+            if indexPath.row == 0 {
+                return 60
+            }
             
             return UITableView.automaticDimension
         }
@@ -214,7 +220,6 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.updateContent(text: viewModel.todo.subTitle)
             }
             
-            
             return cell
             
         case .deadLine:
@@ -239,6 +244,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 }
                 
                 cell.viewModel = viewModel
+                
                 return cell
             }
             
@@ -264,9 +270,9 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                     return TagListTableViewCell()
                 }
                 
-                let tags = Array(viewModel.todo.tag)
-                
-                cell.updateContent(tags: tags)
+                cell.viewModel = viewModel
+                cell.bindingOutput()
+            
                 return cell
             }
             

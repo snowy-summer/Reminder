@@ -21,6 +21,12 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
         
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        contentLabel.text = .none
+    }
+    
     override func configureHierarchy() {
         
         contentView.addSubview(iconAndTitleView)
@@ -93,7 +99,7 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
                 contentLabel.text = ""
             }
         case .tag:
-            contentLabel.fontType(what: .listTag)
+           return
         case .priority:
             contentLabel.fontType(what: .listSubTitle)
         default:
