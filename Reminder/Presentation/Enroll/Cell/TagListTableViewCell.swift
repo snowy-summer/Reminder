@@ -22,6 +22,7 @@ final class TagListTableViewCell: BaseTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        bindingOutput()
     }
     
     override func configureHierarchy() {
@@ -37,6 +38,10 @@ final class TagListTableViewCell: BaseTableViewCell {
         tagCollectionView.backgroundColor = .iconBaseBackgroud
         tagCollectionView.layer.cornerRadius = 8
         tagCollectionView.layer.cornerCurve = .continuous
+        tagCollectionView.delegate = self
+        tagCollectionView.dataSource = self
+        tagCollectionView.register(TagCell.self,
+                                   forCellWithReuseIdentifier: TagCell.identifier)
         
         tagTextField.layer.cornerRadius = 8
         tagTextField.backgroundColor = .iconBaseBackgroud
@@ -49,8 +54,6 @@ final class TagListTableViewCell: BaseTableViewCell {
         addTagButton.layer.cornerRadius = 8
         addTagButton.layer.cornerCurve = .continuous
         
-        tagCollectionView.register(TagCell.self,
-                                   forCellWithReuseIdentifier: TagCell.identifier)
     }
     
     override func configureLayout() {
@@ -58,7 +61,7 @@ final class TagListTableViewCell: BaseTableViewCell {
         tagCollectionView.snp.makeConstraints { make in
             make.top.equalTo(contentView.snp.top).offset(8)
             make.directionalHorizontalEdges.equalTo(contentView.snp.directionalHorizontalEdges).inset(16)
-            make.height.greaterThanOrEqualTo(60)
+            make.height.equalTo(60)
         }
         
         tagTextField.snp.makeConstraints { make in
@@ -85,24 +88,47 @@ final class TagListTableViewCell: BaseTableViewCell {
     }
 
     private func createCollectionViewLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize( widthDimension: .estimated(1.0),
+                                               heightDimension: .estimated(44))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(4),
+                                                         top: .none,
+                                                         trailing: .fixed(4),
+                                                         bottom: .none)
+        //TODO: - 제약 조건 문제
+
+        let groupSize = NSCollectionLayoutSize( widthDimension: .fractionalWidth(1.0),
+                                                heightDimension: .estimated(44))
+        let group = NSCollectionLayoutGroup.horizontal( layoutSize: groupSize,
+                                                        subitems: [item])
         
-        var layout = UICollectionViewFlowLayout()
-        
-        layout.minimumLineSpacing = 8
-        layout.minimumInteritemSpacing = 8
-        
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 8
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8,
+                                                        leading: 8,
+                                                        bottom: 8,
+                                                        trailing: 8)
+
+        let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
+
 }
 
 extension TagListTableViewCell {
     
     private func bindingOutput() {
         
-        viewModel.$tagList.sink { [weak self]  _ in
+        viewModel.$tagList.receive(on: DispatchQueue.main)
+            .sink { [weak self]  _ in
             guard let self = self else { return }
             
             tagCollectionView.reloadData()
+                if !viewModel.tagList.isEmpty {
+                    tagCollectionView.snp.updateConstraints { [weak self] make in
+                        make.height.equalTo((self?.tagCollectionView.contentSize.height)! + 8)
+                    }
+                }
         }.store(in: &cancellable)
     }
     
@@ -122,6 +148,7 @@ extension TagListTableViewCell: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
+
         return viewModel.tagList.count
     }
     

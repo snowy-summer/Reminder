@@ -47,6 +47,7 @@ final class EnrollViewController: BaseViewController {
         
         navigationItem.rightBarButtonItem = saveItem
         navigationItem.leftBarButtonItem = cancelItem
+        navigationController?.navigationBar.backgroundColor = .modalBackground
     }
     
     override func configureHierarchy() {
@@ -94,28 +95,41 @@ extension EnrollViewController {
             navigationItem.rightBarButtonItem?.isEnabled = canSave ? true : false
         }.store(in: &cancellables)
         
-        viewModel.$isDateExpand.sink { [weak self] isExpand in
-            guard let self = self else { return }
-            
-            enrollTableView.reloadSections(IndexSet(integer: EnrollSections.deadLine.rawValue),
-                                           with: .automatic)
-        }.store(in: &cancellables)
+        viewModel.$deadLine.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                enrollTableView.reloadRows(at: [IndexPath(row: 0,
+                                                          section: EnrollSections.deadLine.rawValue)],
+                                           with: .none)
+            }.store(in: &cancellables)
         
-        viewModel.$isTagExpand.sink { [weak self] isExpand in
-            guard let self = self else { return }
-            
-            enrollTableView.reloadSections(IndexSet(integer: EnrollSections.tag.rawValue),
-                                           with: .automatic)
-        }.store(in: &cancellables)
+        viewModel.$isDateExpand.receive(on: DispatchQueue.main)
+            .sink { [weak self] isExpand in
+                guard let self = self else { return }
+                
+                enrollTableView.reloadSections(IndexSet(integer: EnrollSections.deadLine.rawValue),
+                                               with: .automatic)
+            }.store(in: &cancellables)
+        
+        viewModel.$isTagExpand.receive(on: DispatchQueue.main)
+            .sink { [weak self] isExpand in
+                guard let self = self else { return }
+                
+                enrollTableView.reloadSections(IndexSet(integer: EnrollSections.tag.rawValue),
+                                               with: .automatic)
+            }.store(in: &cancellables)
+        
+        viewModel.$tagList.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                enrollTableView.reloadSections(IndexSet(integer: EnrollSections.tag.rawValue),
+                                               with: .automatic)
+            }.store(in: &cancellables)
     }
     
     @objc private func cancelButtonAction() {
-        
-        //        if model.type == .create {
-        //            dismiss(animated: true)
-        //        } else {
-        //            navigationController?.popViewController(animated: true)
-        //        }
         
         dismiss(animated: true)
     }
@@ -123,16 +137,6 @@ extension EnrollViewController {
     @objc private func saveButtonAction() {
         
         viewModel.applyInput(.saveTodo)
-        //        model.saveTodo()
-        //
-        //        if model.type == .create {
-        //            dismiss(animated: true) {
-        //                NotificationCenter.default.post(name: .updateHomeNotification, object: nil)
-        //                NotificationCenter.default.post(name: .pushNotification, object: nil)
-        //            }
-        //        } else {
-        //            navigationController?.popViewController(animated: true)
-        //        }
     }
     
 }
@@ -141,21 +145,31 @@ extension EnrollViewController {
 extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
         
-        switch EnrollSections(rawValue: section) {
+        let sectionType = EnrollSections(rawValue: section)
+        switch sectionType {
         case .main:
             return 2
+            
         case .deadLine:
             return viewModel.isDateExpand ? 2 : 1
+            
         case .tag:
             return viewModel.isTagExpand ? 2 : 1
-        default:
+            
+        case .pin:
             return 1
+            
+        case .priority:
+            return 1
+            
+        default:
+            return 0
         }
     }
     
@@ -224,6 +238,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                     return DatePickerTableViewCell()
                 }
                 
+                cell.viewModel = viewModel
                 return cell
             }
             
@@ -250,26 +265,30 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 }
                 
                 let tags = Array(viewModel.todo.tag)
+                
                 cell.updateContent(tags: tags)
                 return cell
             }
             
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: TagListTableViewCell.identifier,
-                                                           for: indexPath) as? TagListTableViewCell,
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnrollInformationTitleTableViewCell.identifier,
+                                                           for: indexPath) as? EnrollInformationTitleTableViewCell,
                   let type = EnrollSections(rawValue: indexPath.section) else {
                 
-                return TagListTableViewCell()
+                return EnrollInformationTitleTableViewCell()
             }
-        
+            
+            cell.viewModel = viewModel
+            cell.updateContent(type: type, isExpand: viewModel.isDateExpand)
+            
             return cell
+            
+            
             
         }
         
     }
-    
 }
-
 extension EnrollViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController,

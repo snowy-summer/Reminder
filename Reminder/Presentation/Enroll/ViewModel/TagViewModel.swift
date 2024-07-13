@@ -21,11 +21,16 @@ final class TagViewModel {
     @Published private(set) var tagList = [String]()
     private var cancellable = Set<AnyCancellable>()
     
+    init() {
+        bindingInput()
+    }
+    
     func applyInput(input: InputType) {
         self.input = input
     }
 }
 
+//MARK: - Method
 extension TagViewModel {
     
     private func bindingInput() {
@@ -40,8 +45,8 @@ extension TagViewModel {
             case .readTag(let tags):
                 readTag(tags: tags)
                 
-            case .addTag:
-                return
+            case .addTag(let text):
+                addTag(text: text)
                 
             case .removeTag:
                 return

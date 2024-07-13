@@ -12,6 +12,7 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
     
     private let iconAndTitleView = IconAndTitleView()
     private let expandSwitch = UISwitch()
+    private let contentLabel = UILabel()
     private var cellType: EnrollSections?
     weak var viewModel: EnrollViewModel?
 
@@ -23,12 +24,14 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
     override func configureHierarchy() {
         
         contentView.addSubview(iconAndTitleView)
+        contentView.addSubview(contentLabel)
         contentView.addSubview(expandSwitch)
     }
     
     override func configureUI() {
         super.configureUI()
-        
+     
+        contentLabel.textAlignment = .right
     }
     
     override func configureLayout() {
@@ -38,8 +41,13 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
             make.verticalEdges.equalTo(contentView.snp.verticalEdges).inset(8)
         }
         
-        expandSwitch.snp.makeConstraints { make in
+        contentLabel.snp.makeConstraints { make in
             make.leading.equalTo(iconAndTitleView.snp.trailing)
+            make.centerY.equalTo(iconAndTitleView.snp.centerY)
+        }
+        
+        expandSwitch.snp.makeConstraints { make in
+            make.leading.equalTo(contentLabel.snp.trailing).offset(16)
             make.trailing.equalTo(contentView.snp.trailing).inset(16)
             make.centerY.equalTo(iconAndTitleView.snp.centerY)
         }
@@ -59,6 +67,8 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
             viewModel?.applyInput(.expandDateCell)
         case .tag:
             viewModel?.applyInput(.expandTagCell)
+        case .pin:
+            viewModel?.applyInput(.pinTogle)
         default:
             return
         }
@@ -70,25 +80,24 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
         cellType = type
         iconAndTitleView.updateContent(type: type)
         expandSwitch.isOn = isExpand
-//
-//        titleLabel.text = type.text
-//        iconImageView.image = UIImage(systemName: type.iconName)
-//        iconImageView.tintColor = .baseFont
-//        iconView.backgroundColor = type.backgroundColor
-//        contentLabel.text = content
-//        thumbnailImageView.isHidden = true
-//        contentLabel.isHidden = false
-//        
-//        switch type {
-//        
-//        case .deadLine:
-//            contentLabel.fontType(what: .listDateLabel)
-//        case .tag:
-//            contentLabel.fontType(what: .listTag)
-//        case .priority:
-//            contentLabel.fontType(what: .listSubTitle)
-//        default:
-//            break
-//        }
+        
+        switch type {
+        
+        case .deadLine:
+            if let deadLine = viewModel?.deadLine {
+                contentLabel.fontType(what: .listDateLabel)
+                contentLabel.text = DateManager.shared.formattedDate(date: deadLine)
+            }
+            
+            if expandSwitch.isOn == false {
+                contentLabel.text = ""
+            }
+        case .tag:
+            contentLabel.fontType(what: .listTag)
+        case .priority:
+            contentLabel.fontType(what: .listSubTitle)
+        default:
+            break
+        }
     }
 }

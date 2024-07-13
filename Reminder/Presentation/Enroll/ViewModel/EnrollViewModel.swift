@@ -12,25 +12,35 @@ final class EnrollViewModel {
     
     enum InputType {
         case noValue
+        
         case updateTitle(String?)
         case updateSubTitle(String?)
+        
         case expandDateCell
         case selectDate(Date?)
+        
         case selectPriority(Int?)
+        
         case expandTagCell
         case updateTags([String])
+        
+        case pinTogle
+        
         case addImage(String)
+        
         case saveTodo
     }
     
-    private(set) var todo = Todo(title: "")
-    private var folder: CustomTodoFolder?
     @Published private var input: InputType = .noValue
-    private var cancellable = Set<AnyCancellable>()
     @Published private(set) var canSave = false
     
+    private(set) var todo = Todo(title: "")
+    private var folder: CustomTodoFolder?
+    @Published private(set) var deadLine: Date?
     @Published private(set) var isDateExpand = false
+    @Published private(set) var tagList = [String]()
     @Published private(set) var isTagExpand = false
+    private var cancellable = Set<AnyCancellable>()
     
     init() {
         bindingInput()
@@ -54,22 +64,25 @@ final class EnrollViewModel {
                 
             case .updateSubTitle(let subTitle):
                 updateSubTitle(text: subTitle)
-                
+//MARK: - 날짜
             case .expandDateCell:
-                dateCellExpand()
+                expandDateCell()
                 
             case .selectDate(let date):
                 updateDate(date: date)
-                
+//MARK: - 우선 순위
             case .selectPriority(let priority):
                 updatePriority(value: priority)
-                
+//MARK: - 태그
             case .expandTagCell:
                 expandTagCell()
                 
             case .updateTags(let tags):
                 updateTags(tags: tags)
-                
+//MARK: - 깃발
+            case .pinTogle:
+                pinToggle()
+//MARK: - 이미지
             case .addImage(let imageName):
                 addImage(imageName: imageName)
                 
@@ -103,15 +116,19 @@ extension EnrollViewModel {
     
     private func updateDate(date: Date?) {
         
+        deadLine = date
         todo.deadLine = date
     }
     
-    private func dateCellExpand() {
+    private func expandDateCell() {
         isDateExpand.toggle()
+        
+        if isDateExpand == false {
+            todo.deadLine = nil
+        }
     }
     
     private func updatePriority(value: Int?) {
-        
         todo.priority = value
     }
     
@@ -126,6 +143,11 @@ extension EnrollViewModel {
         tags.forEach { value in
             todo.tag.append(value)
         }
+        tagList = tags
+    }
+    
+    private func pinToggle() {
+        todo.isPined.toggle()
     }
     
     private func addImage(imageName: String) {
