@@ -47,6 +47,7 @@ final class EnrollViewController: BaseViewController {
         
         navigationItem.rightBarButtonItem = saveItem
         navigationItem.leftBarButtonItem = cancelItem
+        navigationItem.title = "새로운 미리 알림"
         navigationController?.navigationBar.backgroundColor = .modalBackground
     }
     
@@ -67,6 +68,8 @@ final class EnrollViewController: BaseViewController {
         
         enrollTableView.register(EnrollInformationTitleTableViewCell.self,
                                  forCellReuseIdentifier: EnrollInformationTitleTableViewCell.identifier)
+        enrollTableView.register(EnrollInformationNoneSwitchCell.self,
+                                 forCellReuseIdentifier: EnrollInformationNoneSwitchCell.identifier)
         enrollTableView.register(DatePickerTableViewCell.self,
                                  forCellReuseIdentifier: DatePickerTableViewCell.identifier)
         enrollTableView.register(TagListTableViewCell.self,
@@ -94,6 +97,16 @@ extension EnrollViewController {
             
             navigationItem.rightBarButtonItem?.isEnabled = canSave ? true : false
         }.store(in: &cancellables)
+        
+        viewModel.$folder.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                enrollTableView.reloadRows(at: [IndexPath(row: 0,
+                                                          section: EnrollSections.folder.rawValue)],
+                                           with: .none)
+            }.store(in: &cancellables)
+        
         
         viewModel.$deadLine.receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -139,7 +152,7 @@ extension EnrollViewController {
 extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return EnrollSections.allCases.count
     }
     
     func tableView(_ tableView: UITableView,
@@ -149,6 +162,9 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
         switch sectionType {
         case .main:
             return 2
+            
+        case .folder:
+            return 1
             
         case .deadLine:
             return viewModel.isDateExpand ? 2 : 1
@@ -160,6 +176,9 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             return 1
             
         case .priority:
+            return 1
+            
+        case .addImage:
             return 1
             
         default:
@@ -222,6 +241,20 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             
             return cell
             
+        case .folder:
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnrollInformationNoneSwitchCell.identifier,
+                                                           for: indexPath) as? EnrollInformationNoneSwitchCell,
+                  let type = EnrollSections(rawValue: indexPath.section) else {
+                
+                return EnrollInformationNoneSwitchCell()
+            }
+            
+            cell.viewModel = viewModel
+            cell.updateContent(type: type, content: viewModel.folder?.name)
+            
+            return cell
+            
         case .deadLine:
             
             if indexPath.row == 0 {
@@ -272,9 +305,23 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 
                 cell.viewModel = viewModel
                 cell.bindingOutput()
-            
+                
                 return cell
             }
+            
+        case .addImage:
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnrollInformationNoneSwitchCell.identifier,
+                                                           for: indexPath) as? EnrollInformationNoneSwitchCell,
+                  let type = EnrollSections(rawValue: indexPath.section) else {
+                
+                return EnrollInformationNoneSwitchCell()
+            }
+            
+            cell.viewModel = viewModel
+            cell.updateContent(type: type, content: nil)
+            
+            return cell
             
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EnrollInformationTitleTableViewCell.identifier,
@@ -289,10 +336,39 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             
             return cell
             
-            
-            
         }
         
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard let section = EnrollSections(rawValue: indexPath.section) else { return }
+        
+        switch section {
+            
+        case .folder:
+            let vc = FolderListViewController { [weak self] folder in
+                
+                self?.viewModel.applyInput(.updateFolder(folder))
+            }
+            
+            navigationController?.pushViewController(vc, animated: true)
+            return
+            
+        case .addImage:
+            var configuration = PHPickerConfiguration()
+            configuration.filter = .images
+            configuration.selectionLimit = 4
+            
+            let picker = PHPickerViewController(configuration: configuration)
+            picker.delegate = self
+            present(picker, animated: true)
+            
+            return
+            
+        default:
+            return
+        }
     }
 }
 extension EnrollViewController: PHPickerViewControllerDelegate {
@@ -300,16 +376,20 @@ extension EnrollViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController,
                 didFinishPicking results: [PHPickerResult]) {
         
-        //        if let itemProvider = results.first?.itemProvider,
-        //           itemProvider.canLoadObject(ofClass: UIImage.self) {
-        //
-        //            itemProvider.loadObject(ofClass: UIImage.self) {[weak self] image, error in
-        //
-        //                self?.model.photoImage = image as? UIImage
-        //            }
-        //        }
-        //
-        //        dismiss(animated: true)
+        for result in results {
+            let itemProvider = result.itemProvider
+            if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                
+                itemProvider.loadObject(ofClass: UIImage.self) {[weak self] image, error in
+                    guard let self = self,
+                          let image = image as? UIImage else { return }
+                    
+                    viewModel.imageList.append(image)
+                }
+            }
+        }
+        
+        dismiss(animated: true)
     }
     
 }

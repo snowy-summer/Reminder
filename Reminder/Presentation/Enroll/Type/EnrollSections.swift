@@ -9,6 +9,7 @@ import UIKit
 
 enum EnrollSections: Int, CaseIterable {
     case main
+    case folder
     case deadLine
     case tag
     case pin
@@ -19,6 +20,8 @@ enum EnrollSections: Int, CaseIterable {
         switch self {
         case .main:
             return "주요 내용"
+        case .folder:
+            return "목록"
         case .deadLine:
             return "날짜"
         case .tag:
@@ -34,6 +37,8 @@ enum EnrollSections: Int, CaseIterable {
     
     var iconName: String {
         switch self {
+        case .folder:
+            return "list.bullet"
         case .deadLine:
             return "calendar"
         case .tag:
@@ -42,6 +47,8 @@ enum EnrollSections: Int, CaseIterable {
             return "flag.fill"
         case .priority:
             return "star.fill"
+        case .addImage:
+            return "photo"
         default:
             return ""
         }
@@ -49,7 +56,8 @@ enum EnrollSections: Int, CaseIterable {
     
     var backgroundColor: UIColor {
         switch self {
-            
+        case .folder:
+            return #colorLiteral(red: 0.042927064, green: 0.5177074075, blue: 1, alpha: 1)
         case .deadLine:
             return #colorLiteral(red: 1, green: 0.1513743699, blue: 0.1607473493, alpha: 1)
         case .tag:
@@ -58,6 +66,8 @@ enum EnrollSections: Int, CaseIterable {
             return #colorLiteral(red: 1, green: 0.6005576253, blue: 0, alpha: 1)
         case .priority:
             return #colorLiteral(red: 1, green: 0.1513743699, blue: 0.1607473493, alpha: 1)
+        case .addImage:
+            return #colorLiteral(red: 0.3331231177, green: 0.8859972358, blue: 0.272944808, alpha: 1)
         default:
             return .tintColor
         }

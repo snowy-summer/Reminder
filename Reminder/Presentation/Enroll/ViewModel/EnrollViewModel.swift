@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import Combine
 
 final class EnrollViewModel {
@@ -15,6 +16,8 @@ final class EnrollViewModel {
         
         case updateTitle(String?)
         case updateSubTitle(String?)
+        
+        case updateFolder(CustomTodoFolder?)
         
         case expandDateCell
         case selectDate(Date?)
@@ -37,12 +40,12 @@ final class EnrollViewModel {
     @Published private(set) var canSave = false
     
     private(set) var todo = Todo(title: "")
-    private var folder: CustomTodoFolder?
-    
+    @Published private(set) var folder: CustomTodoFolder?
     @Published private(set) var deadLine: Date?
     @Published private(set) var isDateExpand = false
     @Published private(set) var tagList = [String]()
     @Published private(set) var isTagExpand = false
+    @Published var imageList = [UIImage]()
     private var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -67,6 +70,9 @@ final class EnrollViewModel {
                 
             case .updateSubTitle(let subTitle):
                 updateSubTitle(text: subTitle)
+                
+            case .updateFolder(let folder):
+                updateFolder(folder: folder)
 //MARK: - 날짜
             case .expandDateCell:
                 expandDateCell()
@@ -123,6 +129,10 @@ extension EnrollViewModel {
         guard let text = text else { return }
         
         todo.subTitle = text
+    }
+    
+    private func updateFolder(folder: CustomTodoFolder?) {
+        self.folder = folder
     }
 }
 
