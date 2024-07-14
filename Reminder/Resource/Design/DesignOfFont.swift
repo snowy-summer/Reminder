@@ -39,7 +39,7 @@ enum DesignOfFont {
             return .systemFont(ofSize: 17,
                                weight: .semibold)
         case .listSubTitle:
-            return .systemFont(ofSize: 14,
+            return .systemFont(ofSize: 15,
                                weight: .semibold)
         case .listDateLabel:
             return .systemFont(ofSize: 14,

@@ -14,9 +14,9 @@ final class Todo: Object {
     @Persisted var title: String
     @Persisted var subTitle: String?
     @Persisted var deadLine: Date?
-    @Persisted var tag: List<String> = List<String>()
+    @Persisted var tag = List<String>()
     @Persisted var priority: Int?
-    @Persisted var imageName: String?
+    @Persisted var imagesName = List<String>()
     @Persisted var releaseDate: Date = Date()
     @Persisted var isPined = false
     @Persisted var isDone = false
@@ -26,14 +26,12 @@ final class Todo: Object {
     convenience init(title: String,
                      priority: Int? = nil,
                      subTitle: String? = nil,
-                     deadLine: Date? = nil,
-                     imageName: String? = nil) {
+                     deadLine: Date? = nil) {
         self.init()
     
         self.title = title
         self.subTitle = subTitle
         self.deadLine = deadLine
         self.priority = priority
-        self.imageName = imageName
     }
 }

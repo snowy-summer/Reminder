@@ -198,7 +198,11 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let data = model[indexPath.row]
-        navigationController?.pushViewController(EnrollViewController(todo: data, type: .edit), animated: true)
+        navigationController?.pushViewController(EnrollViewController { [weak self] in
+            self?.listTableView.reloadRows(at: [indexPath],
+                                           with: .none)
+        },
+                                                 animated: true)
     }
     
 }

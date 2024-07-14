@@ -22,7 +22,7 @@ final class EnrollViewModel {
         case expandDateCell
         case selectDate(Date?)
         
-        case selectPriority(Int?)
+        case selectPriority(Int)
         
         case expandTagCell
         case updateTags([String])
@@ -31,21 +31,27 @@ final class EnrollViewModel {
         
         case pinTogle
         
-        case addImage(String)
+        case appendImage(UIImage)
+        case removeImage(Int)
         
         case saveTodo
     }
     
     @Published private var input: InputType = .noValue
+    private let photoManager = PhotoManager()
     @Published private(set) var canSave = false
     
     private(set) var todo = Todo(title: "")
     @Published private(set) var folder: CustomTodoFolder?
+    
     @Published private(set) var deadLine: Date?
     @Published private(set) var isDateExpand = false
+    
     @Published private(set) var tagList = [String]()
     @Published private(set) var isTagExpand = false
-    @Published var imageList = [UIImage]()
+    
+    @Published private(set) var priority = 0
+    @Published var imageList = [String]()
     private var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -71,20 +77,20 @@ final class EnrollViewModel {
             case .updateSubTitle(let subTitle):
                 updateSubTitle(text: subTitle)
                 
-            case .updateFolder(let folder):
-                updateFolder(folder: folder)
+            case .updateFolder(let newFolder):
+                folder = newFolder
 //MARK: - 날짜
             case .expandDateCell:
-                expandDateCell()
+                isDateExpand.toggle()
                 
             case .selectDate(let date):
-                updateDate(date: date)
+                deadLine = date
 //MARK: - 우선 순위
-            case .selectPriority(let priority):
-                updatePriority(value: priority)
+            case .selectPriority(let value):
+                priority = value
 //MARK: - 태그
             case .expandTagCell:
-                expandTagCell()
+                isTagExpand.toggle()
                 
             case .updateTags(let tags):
                 updateTags(tags: tags)
@@ -93,13 +99,16 @@ final class EnrollViewModel {
                 addTag(tag: tag)
                 
             case .removeTag(let index):
-                removeTag(index: index)
+                tagList.remove(at: index)
 //MARK: - 깃발
             case .pinTogle:
-                pinToggle()
+                todo.isPined.toggle()
 //MARK: - 이미지
-            case .addImage(let imageName):
-                addImage(imageName: imageName)
+            case .appendImage(let image):
+                appendImage(image: image)
+        
+            case .removeImage(let index):
+                removeImage(index: index)
                 
             case .saveTodo:
                 saveTodo()
@@ -130,31 +139,11 @@ extension EnrollViewModel {
         
         todo.subTitle = text
     }
-    
-    private func updateFolder(folder: CustomTodoFolder?) {
-        self.folder = folder
-    }
-}
 
-//MARK: - Date
-extension EnrollViewModel {
-    
-    private func updateDate(date: Date?) {
-        deadLine = date
-    }
-    
-    private func expandDateCell() {
-        isDateExpand.toggle()
-    }
-    
 }
 
 //MARK: - 태그
 extension EnrollViewModel {
-    
-    private func expandTagCell() {
-        isTagExpand.toggle()
-    }
     
     private func updateTags(tags: [String]) {
         
@@ -178,24 +167,23 @@ extension EnrollViewModel {
         tagList.append(tagText)
     }
     
-    private func removeTag(index: Int) {
-        tagList.remove(at: index)
-    }
 }
 
-//MARK: - pin, image, priority
+//MARK: - image, priority
 extension EnrollViewModel {
     
-    private func updatePriority(value: Int?) {
-        todo.priority = value
+    private func appendImage(image: UIImage) {
+        
+        let photoId = "\(UUID())"
+        photoManager.saveImageToDocument(image: image, filename: photoId )
+        imageList.append(photoId)
+        
     }
     
-    private func pinToggle() {
-        todo.isPined.toggle()
-    }
-    
-    private func addImage(imageName: String) {
-        todo.imageName = imageName
+    private func removeImage(index: Int) {
+        
+        photoManager.removeImageFromDocument(filename: imageList[index])
+        imageList.remove(at: index)
     }
     
     private func saveTodo() {
@@ -209,6 +197,14 @@ extension EnrollViewModel {
                 todo.tag.append(value)
             }
         }
+        
+        if !imageList.isEmpty {
+            imageList.forEach { value in
+                todo.imagesName.append(value)
+            }
+        }
+        
+        todo.priority = priority
         
         if let folder = folder {
             DataBaseManager.shared.update(folder) { [weak self] folder in

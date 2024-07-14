@@ -8,34 +8,34 @@
 import Foundation
 
 enum PriorityType: Int, CaseIterable {
-    case high
-    case middle
-    case low
     case no
+    case low
+    case middle
+    case high
     
     var title: String {
         switch self {
-        case .high:
-            return "상"
-        case .middle:
-            return "중"
-        case .low:
-            return "하"
         case .no:
-            return ""
+            return "없음"
+        case .low:
+            return "낮음"
+        case .middle:
+            return "중간"
+        case .high:
+            return "높음"
         }
     }
     
     var listTitle: String {
         switch self {
-        case .high:
-            return "!!!"
-        case .middle:
-            return "!!"
-        case .low:
-            return "!"
         case .no:
             return ""
+        case .low:
+            return "!"
+        case .middle:
+            return "!!"
+        case .high:
+            return "!!!"
         }
     }
 }

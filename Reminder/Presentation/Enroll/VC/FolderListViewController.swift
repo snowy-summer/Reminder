@@ -42,6 +42,7 @@ final class FolderListViewController: BaseViewController {
         
         listTableView.delegate = self
         listTableView.dataSource = self
+        listTableView.rowHeight = 60
         listTableView.layer.cornerRadius = 8
         listTableView.register(CustomFolderTableViewCell.self,
                                forCellReuseIdentifier: CustomFolderTableViewCell.identifier)

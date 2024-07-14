@@ -16,13 +16,16 @@ final class EnrollViewController: BaseViewController {
                                               style: .insetGrouped)
     
     private let viewModel = EnrollViewModel()
-    
-    private let photoManager = PhotoManager()
     private var cancellables = Set<AnyCancellable>()
+    var reloadView: (() -> Void)?
     
-    convenience init(todo: Todo, type: EnrollVCModel.EnrollType) {
-        self.init(nibName: nil, bundle: nil)
-        
+    init(reloadView: @escaping (() -> Void)) {
+        super.init(nibName: nil, bundle: nil)
+        self.reloadView = reloadView
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -72,8 +75,12 @@ final class EnrollViewController: BaseViewController {
                                  forCellReuseIdentifier: EnrollInformationNoneSwitchCell.identifier)
         enrollTableView.register(DatePickerTableViewCell.self,
                                  forCellReuseIdentifier: DatePickerTableViewCell.identifier)
+        enrollTableView.register(PriorityTableViewCell.self,
+                                 forCellReuseIdentifier: PriorityTableViewCell.identifier)
         enrollTableView.register(TagListTableViewCell.self,
                                  forCellReuseIdentifier: TagListTableViewCell.identifier)
+        enrollTableView.register(ImageListTableViewCell.self,
+                                 forCellReuseIdentifier: ImageListTableViewCell.identifier)
         
     }
     
@@ -83,7 +90,6 @@ final class EnrollViewController: BaseViewController {
             make.directionalEdges.equalTo(view.safeAreaLayoutGuide)
         }
     }
-    
     
 }
 
@@ -118,7 +124,7 @@ extension EnrollViewController {
             }.store(in: &cancellables)
         
         viewModel.$isDateExpand.receive(on: DispatchQueue.main)
-            .sink { [weak self] isExpand in
+            .sink { [weak self] _ in
                 guard let self = self else { return }
                 
                 enrollTableView.reloadSections(IndexSet(integer: EnrollSections.deadLine.rawValue),
@@ -126,13 +132,28 @@ extension EnrollViewController {
             }.store(in: &cancellables)
         
         viewModel.$isTagExpand.receive(on: DispatchQueue.main)
-            .sink { [weak self] isExpand in
+            .sink { [weak self] _ in
                 guard let self = self else { return }
                 
                 enrollTableView.reloadSections(IndexSet(integer: EnrollSections.tag.rawValue),
                                                with: .automatic)
             }.store(in: &cancellables)
         
+        viewModel.$priority.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                enrollTableView.reloadSections(IndexSet(integer: EnrollSections.priority.rawValue),
+                                               with: .automatic)
+            }.store(in: &cancellables)
+        
+        viewModel.$imageList.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                enrollTableView.reloadSections(IndexSet(integer: EnrollSections.addImage.rawValue),
+                                               with: .automatic)
+            }.store(in: &cancellables)
     }
     
     @objc private func cancelButtonAction() {
@@ -143,7 +164,9 @@ extension EnrollViewController {
     @objc private func saveButtonAction() {
         
         viewModel.applyInput(.saveTodo)
-        dismiss(animated: true)
+        dismiss(animated: true) { [weak self] in
+            self?.reloadView?()
+        }
     }
     
 }
@@ -179,7 +202,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             return 1
             
         case .addImage:
-            return 1
+            return viewModel.imageList.count + 1
             
         default:
             return 0
@@ -202,6 +225,10 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
             return view.frame.height * 0.3
+            
+        case .addImage:
+            
+            return 60
             
         default:
             
@@ -309,19 +336,46 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 return cell
             }
             
-        case .addImage:
-            
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnrollInformationNoneSwitchCell.identifier,
-                                                           for: indexPath) as? EnrollInformationNoneSwitchCell,
+        case .priority:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PriorityTableViewCell.identifier,
+                                                           for: indexPath) as? PriorityTableViewCell,
                   let type = EnrollSections(rawValue: indexPath.section) else {
                 
-                return EnrollInformationNoneSwitchCell()
+                return PriorityTableViewCell()
             }
             
             cell.viewModel = viewModel
-            cell.updateContent(type: type, content: nil)
+            cell.updateContent()
             
             return cell
+            
+        case .addImage:
+            
+            if indexPath.row == 0 {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: EnrollInformationNoneSwitchCell.identifier,
+                                                               for: indexPath) as? EnrollInformationNoneSwitchCell,
+                      let type = EnrollSections(rawValue: indexPath.section) else {
+                    
+                    return EnrollInformationNoneSwitchCell()
+                }
+                
+                cell.viewModel = viewModel
+                cell.updateContent(type: type, content: nil)
+                
+                return cell
+                
+            } else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageListTableViewCell.identifier,
+                                                               for: indexPath) as? ImageListTableViewCell else {
+                    
+                    return ImageListTableViewCell()
+                }
+                
+                let data = viewModel.imageList[indexPath.row - 1]
+                cell.updateContent(name: data)
+                
+                return cell
+            }
             
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EnrollInformationTitleTableViewCell.identifier,
@@ -356,15 +410,21 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             return
             
         case .addImage:
-            var configuration = PHPickerConfiguration()
-            configuration.filter = .images
-            configuration.selectionLimit = 4
             
-            let picker = PHPickerViewController(configuration: configuration)
-            picker.delegate = self
-            present(picker, animated: true)
-            
-            return
+            if indexPath.row == 0 {
+                var configuration = PHPickerConfiguration()
+                configuration.filter = .images
+                configuration.selectionLimit = 4
+                
+                let picker = PHPickerViewController(configuration: configuration)
+                picker.delegate = self
+                present(picker, animated: true)
+                
+                return
+                
+            } else {
+                viewModel.applyInput(.removeImage(indexPath.row - 1))
+            }
             
         default:
             return
@@ -384,7 +444,7 @@ extension EnrollViewController: PHPickerViewControllerDelegate {
                     guard let self = self,
                           let image = image as? UIImage else { return }
                     
-                    viewModel.imageList.append(image)
+                    viewModel.applyInput(.appendImage(image))
                 }
             }
         }

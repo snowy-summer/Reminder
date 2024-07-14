@@ -266,7 +266,9 @@ extension HomeViewController {
     
     @objc private func addTodo() {
         
-        let nv = UINavigationController(rootViewController: EnrollViewController())
+        let nv = UINavigationController(rootViewController: EnrollViewController { [weak self] in
+            self?.homeCollectionView.reloadData()
+        })
         
         present(nv, animated: true)
     }
