@@ -277,9 +277,9 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             
             switch type {
             case .title:
-                cell.updateContent(text: viewModel.todo.title)
+                cell.updateContent(text: viewModel.title)
             case .memo:
-                cell.updateContent(text: viewModel.todo.subTitle)
+                cell.updateContent(text: viewModel.subTitle)
             }
             
             return cell
@@ -351,6 +351,20 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
                 
                 return cell
             }
+            
+        case .pin:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnrollInformationTitleTableViewCell.identifier,
+                                                           for: indexPath) as? EnrollInformationTitleTableViewCell,
+                  let type = EnrollSections(rawValue: indexPath.section) else {
+                
+                return EnrollInformationTitleTableViewCell()
+            }
+            
+            cell.viewModel = viewModel
+            cell.updateContent(type: type, isExpand: viewModel.todo.isPined)
+            
+            return cell
+            
             
         case .priority:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PriorityTableViewCell.identifier,

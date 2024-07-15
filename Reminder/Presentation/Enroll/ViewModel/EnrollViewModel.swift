@@ -133,7 +133,14 @@ final class EnrollViewModel {
         $todo.sink { [weak self] newTodo in
             guard let self = self else { return }
             if newTodo.title.isEmpty { return }
+            
             folder = newTodo.folder.first
+            
+            title = newTodo.title
+            
+            if let newSubTitle = newTodo.subTitle {
+                subTitle = newSubTitle
+            }
             
             if let date = todo.deadLine {
                 deadLine = date
@@ -232,24 +239,55 @@ extension EnrollViewModel {
                 
                 if isDateExpand {
                     todo.deadLine = deadLine
+                } else {
+                    todo.deadLine = nil
                 }
                 
                 if isTagExpand {
+                    todo.tag.removeAll()
                     tagList.forEach { value in
                         todo.tag.append(value)
                     }
+                } else {
+                    todo.tag.removeAll()
                 }
                 
                 if !imageList.isEmpty {
+                    todo.imagesName.removeAll()
                     imageList.forEach { value in
                         todo.imagesName.append(value)
                     }
+                } else {
+                    todo.imagesName.removeAll()
                 }
+                
                 todo.isPined = isPined
                 todo.priority = priority
-                return
+                
+            }
+            return
+        }
+        
+        todo.title = title
+        todo.subTitle = subTitle
+        
+        if isDateExpand {
+            todo.deadLine = deadLine
+        }
+        
+        if isTagExpand {
+            tagList.forEach { value in
+                todo.tag.append(value)
             }
         }
+        
+        if !imageList.isEmpty {
+            imageList.forEach { value in
+                todo.imagesName.append(value)
+            }
+        }
+        todo.isPined = isPined
+        todo.priority = priority
         
         if let folder = folder {
             DataBaseManager.shared.update(folder) { [weak self] folder in
@@ -259,28 +297,6 @@ extension EnrollViewModel {
             }
             
         } else {
-            
-            todo.title = title
-            todo.subTitle = subTitle
-            
-            if isDateExpand {
-                todo.deadLine = deadLine
-            }
-            
-            if isTagExpand {
-                tagList.forEach { value in
-                    todo.tag.append(value)
-                }
-            }
-            
-            if !imageList.isEmpty {
-                imageList.forEach { value in
-                    todo.imagesName.append(value)
-                }
-            }
-            todo.isPined = isPined
-            todo.priority = priority
-            
             DataBaseManager.shared.add(todo)
         }
     }
