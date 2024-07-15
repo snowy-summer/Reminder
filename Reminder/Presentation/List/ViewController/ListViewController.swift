@@ -6,24 +6,23 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 import RealmSwift
 
 final class ListViewController: BaseViewController {
     
     private let listTableView = UITableView()
-    private var model: Results<Todo> {
-        didSet {
-            listTableView.reloadData()
-        }
-    }
+    private let viewModel: ListViewModel
+    private var cancellable = Set<AnyCancellable>()
     
-    init(data: Results<Todo>,
-         type: HomeFilteredFolderCellType) {
-        self.model = data
+    init(data: [Todo],
+         name: String,
+         color: UIColor) {
+        self.viewModel = ListViewModel(todoList: data)
         super.init(nibName: nil, bundle: nil)
-        
-        configureTableHeaderView(type: type)
+        configureTableHeaderView(name: name,
+                                 color: color)
     }
     
     required init?(coder: NSCoder) {
@@ -32,7 +31,7 @@ final class ListViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        bindingOutput()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,21 +82,29 @@ final class ListViewController: BaseViewController {
 //MARK: - ListVC private, @objc
 extension ListViewController {
     
+    private func bindingOutput() {
+        
+        viewModel.$reloadOutPut.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.listTableView.reloadData()
+            }.store(in: &cancellable)
+    }
+    
     private func configureMenu() -> UIMenu {
         
         let sortedByTitle = UIAction(title: "제목 순으로 보기") { [weak self] _ in
             guard let self = self else { return }
-            model = model.sorted(byKeyPath: "title", ascending: true)
+            viewModel.applyInput(.sortedByTitle)
         }
         
         let sortedByDate = UIAction(title: "마감일 순으로 보기") { [weak self] _ in
             guard let self = self else { return }
-            model = model.sorted(byKeyPath: "deadLine", ascending: true)
+            viewModel.applyInput(.sortedByDate)
         }
         
         let sortedByPriority = UIAction(title: "우선순위 순으로 보기") { [weak self] _ in
             guard let self = self else { return }
-            model = model.sorted(byKeyPath: "priority", ascending: true)
+            viewModel.applyInput(.sortedByPriority)
         }
         
         let items = [
@@ -109,9 +116,11 @@ extension ListViewController {
         return UIMenu(children: items)
     }
     
-    private func configureTableHeaderView(type: HomeFilteredFolderCellType) {
+    private func configureTableHeaderView(name: String,
+                                          color: UIColor) {
         
-        let headerView = TitleHeaderView(type: type)
+        let headerView = TitleHeaderView(name: name,
+                                         color: color)
         headerView.frame = CGRect(x: 0,
                                   y: 0,
                                   width: listTableView.frame.width,
@@ -123,12 +132,6 @@ extension ListViewController {
         navigationController?.popViewController(animated: true)
         NotificationCenter.default.post(name: .updateHomeNotification, object: nil)
     }
-    
-    @objc private func updateTable() {
-        
-        listTableView.reloadData()
-    }
-    
 }
 
 //MARK: - TableView Delegate, DataSource
@@ -136,7 +139,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return model.count
+        return viewModel.todoList.count
     }
     
     func tableView(_ tableView: UITableView,
@@ -146,12 +149,12 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
                                                        for: indexPath) as? ListTableViewCell else {
             return ListTableViewCell()
         }
-        let data = model[indexPath.row]
-        cell.changeState = {
-            DataBaseManager.shared.update(data) { data in
-                data.isDone.toggle()
-            }
-            
+        
+        let data = viewModel.todoList[indexPath.row]
+        
+        cell.changeState = { [weak self] in
+           
+            self?.viewModel.applyInput(.doneToggle(indexPath.row))
             return data.isDone
         }
         cell.updateContent(data: data)
@@ -165,22 +168,16 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
                                         title: nil) { [weak self] action, view, completionHandler in
             guard let self = self else { return }
             
-            let todo = model[indexPath.row]
-            DataBaseManager.shared.delete(todo)
-            tableView.reloadData()
+            viewModel.applyInput(.removeTodo(indexPath.row))
+            return
         }
         
         let favorite = UIContextualAction(style: .normal,
                                           title: nil) { [weak self] action, view, completionHandler in
             guard let self = self else { return }
             
-            
-            let data = model[indexPath.row]
-            
-            DataBaseManager.shared.update(data) { data in
-                data.isPined.toggle()
-            }
-            
+            viewModel.applyInput(.favoriteToggle(indexPath.row))
+            return
         }
         
         delete.backgroundColor = #colorLiteral(red: 0.9982114434, green: 0.3084382713, blue: 0.2676828206, alpha: 1)
@@ -197,8 +194,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let data = model[indexPath.row]
-        navigationController?.pushViewController(EnrollViewController { [weak self] in
+        let data = viewModel.todoList[indexPath.row]
+        navigationController?.pushViewController(EnrollViewController(todo: data) { [weak self] in
             self?.listTableView.reloadRows(at: [indexPath],
                                            with: .none)
         },

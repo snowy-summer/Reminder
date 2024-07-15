@@ -116,8 +116,8 @@ extension ListTableViewCell {
     
     func updateContent(data: Todo) {
         
-        if let priority = data.priority,
-           let type = PriorityType(rawValue: priority) {
+        
+        if let type = PriorityType(rawValue: data.priority) {
             priorityLabel.isHidden = false
             priorityLabel.text = type.listTitle
         } else {

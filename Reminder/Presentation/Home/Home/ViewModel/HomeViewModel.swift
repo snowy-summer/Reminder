@@ -14,10 +14,7 @@ final class HomeViewModel {
     enum InputType {
         case noValue
         case viewDidLoad
-        case filteredFolderClicked(Int)
-        case addNewTodo
         case addNewCustomFolder
-        case customFolderClicked(Int)
         case deleteCustomFolder(Int)
         case searchTodo(String?)
         case filteredDate(Date)
@@ -48,17 +45,8 @@ final class HomeViewModel {
             case .viewDidLoad:
                 readCustomFolder()
                 
-            case .filteredFolderClicked(let int):
-                return
-                
-            case .addNewTodo:
-                return
-                
             case .addNewCustomFolder:
                 readCustomFolder()
-                
-            case .customFolderClicked(let index):
-                return
                 
             case .deleteCustomFolder(let index):
                 deleteFolder(index: index)

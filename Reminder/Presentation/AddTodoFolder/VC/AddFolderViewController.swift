@@ -135,13 +135,13 @@ extension AddFolderViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch AddFolderSection(rawValue: indexPath.section) {
         case .title:
-            return  height * 0.24
+            return  height * 0.3
             
         case .selectColor:
-            return height * 0.16
+            return height * 0.2
             
         case .selectIcon:
-            return height * 0.4
+            return height * 0.45
             
         default:
             return 44

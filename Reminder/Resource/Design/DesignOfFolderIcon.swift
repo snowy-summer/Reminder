@@ -84,7 +84,7 @@ enum DesignOfFolderIcon: Int, CaseIterable {
         case .clip:
             return "paperclip"
         case .cloud:
-            return "icloud"
+            return "icloud.fill"
         case .wifi:
             return "wifi"
         case .delivery:

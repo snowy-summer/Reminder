@@ -45,16 +45,19 @@ final class TitleSectionCell: BaseTableViewCell {
     
     override func configureLayout() {
         
-        iconCircleView.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top).inset(20)
-            make.width.height.equalTo(contentView.snp.width).multipliedBy(0.24)
-            make.centerX.equalTo(contentView.snp.centerX)
-        }
-    
         titleTextField.snp.makeConstraints { make in
             make.directionalHorizontalEdges.equalTo(contentView).inset(20)
-            make.top.equalTo(iconCircleView.snp.bottom).offset(20)
+//            make.top.equalTo(iconCircleView.snp.bottom).offset(20)
+            make.height.equalTo(60)
             make.bottom.equalTo(contentView.snp.bottom).inset(20)
+        }
+        
+        iconCircleView.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top).inset(20)
+//            make.width.height.equalTo(contentView.snp.width).multipliedBy(0.24)
+            make.centerX.equalTo(contentView.snp.centerX)
+            make.bottom.equalTo(titleTextField.snp.top).inset(-20)
+            make.width.equalTo(iconCircleView.snp.height)
         }
     }
     

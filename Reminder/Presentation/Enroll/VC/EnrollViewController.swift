@@ -14,14 +14,21 @@ final class EnrollViewController: BaseViewController {
     
     private let enrollTableView = UITableView(frame: .zero,
                                               style: .insetGrouped)
-    
     private let viewModel = EnrollViewModel()
     private var cancellables = Set<AnyCancellable>()
     var reloadView: (() -> Void)?
     
     init(reloadView: @escaping (() -> Void)) {
-        super.init(nibName: nil, bundle: nil)
+        
         self.reloadView = reloadView
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+   convenience init(todo: Todo,
+                    reloadView: @escaping (() -> Void)) {
+       self.init(reloadView: reloadView)
+        
+        viewModel.applyInput(.loadTodo(todo))
     }
     
     required init?(coder: NSCoder) {
@@ -51,7 +58,7 @@ final class EnrollViewController: BaseViewController {
         navigationItem.rightBarButtonItem = saveItem
         navigationItem.leftBarButtonItem = cancelItem
         navigationItem.title = "새로운 미리 알림"
-        navigationController?.navigationBar.backgroundColor = .modalBackground
+        navigationController?.navigationBar.backgroundColor = viewModel.isEditMode ? .base : .modalBackground
     }
     
     override func configureHierarchy() {
@@ -158,17 +165,26 @@ extension EnrollViewController {
     
     @objc private func cancelButtonAction() {
         
-        dismiss(animated: true)
+        if viewModel.isEditMode {
+            navigationController?.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
     }
     
     @objc private func saveButtonAction() {
         
         viewModel.applyInput(.saveTodo)
-        dismiss(animated: true) { [weak self] in
-            self?.reloadView?()
+        
+        if viewModel.isEditMode {
+            reloadView?()
+            navigationController?.popViewController(animated: true)
+        } else {
+            dismiss(animated: true) { [weak self] in
+                self?.reloadView?()
+            }
         }
     }
-    
 }
 
 //MARK: - TableView Delegate, DataSource
@@ -338,8 +354,7 @@ extension EnrollViewController: UITableViewDelegate, UITableViewDataSource {
             
         case .priority:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PriorityTableViewCell.identifier,
-                                                           for: indexPath) as? PriorityTableViewCell,
-                  let type = EnrollSections(rawValue: indexPath.section) else {
+                                                           for: indexPath) as? PriorityTableViewCell else {
                 
                 return PriorityTableViewCell()
             }
@@ -463,11 +478,11 @@ extension EnrollViewController: TitleAndMemoTableViewCellDelegate {
             
             switch type {
             case .title:
-                viewModel.todo.title = text
+                viewModel.applyInput(.updateTitle(text))
                 navigationItem.rightBarButtonItem?.isEnabled = true
                 
             case .memo:
-                viewModel.todo.subTitle = text
+                viewModel.applyInput(.updateSubTitle(text))
             }
             
         } else {

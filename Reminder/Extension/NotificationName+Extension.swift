@@ -8,7 +8,6 @@
 import Foundation
 
 extension Notification.Name {
-    static let pushNotification = Notification.Name("pushNotification")
     static let updateHomeNotification = Notification.Name("updateHomeNotification")
     static let updateHomeCustomFolder = Notification.Name("updateHomeCustomFolder")
 }

@@ -12,11 +12,11 @@ final class TitleHeaderView: UIView {
     
     private let titleLabel = UILabel()
     
-    init(type: HomeFilteredFolderCellType) {
+    init(name: String, color: UIColor) {
         super.init(frame: .zero)
         configureTitle()
-        titleLabel.text = type.title
-        titleLabel.textColor = type.iconTintColor
+        titleLabel.text = name
+        titleLabel.textColor = color
     }
     
     required init?(coder: NSCoder) {

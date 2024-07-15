@@ -8,7 +8,6 @@
 import UIKit
 import Combine
 import SnapKit
-import RealmSwift
 
 final class HomeViewController: BaseViewController {
     
@@ -33,13 +32,11 @@ final class HomeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        homeCollectionView.reloadData()
     }
     
     deinit {
         
-        NotificationCenter.default.removeObserver(self,
-                                                  name: .pushNotification,
-                                                  object: nil)
         NotificationCenter.default.removeObserver(self,
                                                   name: .updateHomeNotification,
                                                   object: nil)
@@ -146,11 +143,6 @@ final class HomeViewController: BaseViewController {
     private func configureNotification() {
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(pushListViewController),
-                                               name: .pushNotification,
-                                               object: nil)
-        
-        NotificationCenter.default.addObserver(self,
                                                selector: #selector(addCustomFolder),
                                                name: .updateHomeNotification,
                                                object: nil)
@@ -197,7 +189,7 @@ final class HomeViewController: BaseViewController {
                         guard let self = self else { return }
                         
                         viewModel.applyUserInput(.deleteCustomFolder(indexPath.row))
-            
+                        
                     }
                     
                     deleteAction.image = UIImage(systemName: "trash.fill")
@@ -256,17 +248,9 @@ extension HomeViewController {
         viewModel.applyUserInput(.addNewCustomFolder)
     }
     
-    @objc private func pushListViewController() {
-        
-        let vc = ListViewController(data: HomeFilteredFolderCellType.all.data,
-                                    type: .all)
-        
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
     @objc private func addTodo() {
         
-        let nv = UINavigationController(rootViewController: EnrollViewController { [weak self] in
+        let nv = UINavigationController(rootViewController: EnrollViewController() { [weak self] in
             self?.homeCollectionView.reloadData()
         })
         
@@ -299,6 +283,8 @@ extension HomeViewController {
     
     @objc private func showTableOrCollectionView() {
         
+        homeCollectionView.isHidden.toggle()
+        searchResultTableView.isHidden.toggle()
     }
     
 }
@@ -382,16 +368,25 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
         
-        if let data = HomeFilteredFolderCellType(rawValue: indexPath.row)?.data {
-            
-            navigationController?.pushViewController(ListViewController(data: data,
-                                                                        type: HomeFilteredFolderCellType(rawValue: indexPath.row)!),
-                                                     animated: true)
+            if let type = HomeFilteredFolderCellType(rawValue: indexPath.row) {
+                
+                navigationController?.pushViewController(ListViewController(data: Array(type.data),
+                                                                            name: type.title,
+                                                                            color: type.iconTintColor),
+                                                         animated: true)
+            }
         } else {
-            //            let data = folderList[indexPath.row - HomeFilteredFolderCellType.allCases.count]
-            //            navigationController?.pushViewController(ExtraTodoInFolderViewController(data: data),
-            //                                                     animated: true)
+            let data = viewModel.customFolderList[indexPath.row]
+            let color = UIColor(red: data.redColor,
+                                green: data.greenColor,
+                                blue: data.blueColor,
+                                alpha: 1.0)
+            navigationController?.pushViewController(ListViewController(data: Array(data.todoList),
+                                                                        name: data.name,
+                                                                        color: color),
+                                                     animated: true)
         }
     }
 }

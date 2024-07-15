@@ -15,7 +15,7 @@ final class Todo: Object {
     @Persisted var subTitle: String?
     @Persisted var deadLine: Date?
     @Persisted var tag = List<String>()
-    @Persisted var priority: Int?
+    @Persisted var priority = 0
     @Persisted var imagesName = List<String>()
     @Persisted var releaseDate: Date = Date()
     @Persisted var isPined = false
@@ -24,7 +24,6 @@ final class Todo: Object {
     @Persisted(originProperty: "todoList") var folder: LinkingObjects<CustomTodoFolder>
     
     convenience init(title: String,
-                     priority: Int? = nil,
                      subTitle: String? = nil,
                      deadLine: Date? = nil) {
         self.init()
@@ -32,6 +31,5 @@ final class Todo: Object {
         self.title = title
         self.subTitle = subTitle
         self.deadLine = deadLine
-        self.priority = priority
     }
 }

@@ -25,6 +25,7 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
         super.prepareForReuse()
         
         contentLabel.text = .none
+        expandSwitch.isOn = false
     }
     
     override func configureHierarchy() {
@@ -74,7 +75,7 @@ final class EnrollInformationTitleTableViewCell: BaseTableViewCell {
         case .tag:
             viewModel?.applyInput(.expandTagCell)
         case .pin:
-            viewModel?.applyInput(.pinTogle)
+            viewModel?.applyInput(.pinToggle)
         default:
             return
         }

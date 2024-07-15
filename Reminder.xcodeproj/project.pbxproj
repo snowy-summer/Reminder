@@ -33,6 +33,7 @@
 		6B5DEDF02C42B91F002B458F /* EnrollInformationNoneSwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDEF2C42B91E002B458F /* EnrollInformationNoneSwitchTableViewCell.swift */; };
 		6B5DEDF22C43A0C6002B458F /* ImageListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDF12C43A0C6002B458F /* ImageListTableViewCell.swift */; };
 		6B5DEDF42C43B7AD002B458F /* PriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDF32C43B7AD002B458F /* PriorityTableViewCell.swift */; };
+		6B5DEDFC2C441550002B458F /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5DEDFB2C441550002B458F /* ListViewModel.swift */; };
 		6B5EDDBE2C37B1D200D5667D /* CalendarModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5EDDBD2C37B1D200D5667D /* CalendarModal.swift */; };
 		6B5EDDC52C37E25B00D5667D /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5EDDC42C37E25B00D5667D /* Date+Extension.swift */; };
 		6B5EDDCC2C39695100D5667D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6B5EDDCB2C39695100D5667D /* SnapKit */; };
@@ -71,7 +72,6 @@
 		6BE7424B2C3549D6009DEE99 /* DateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE7424A2C3549D6009DEE99 /* DateManager.swift */; };
 		6BF3E16E2C3BC6B800F231FF /* CustomTodoFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E16D2C3BC6B800F231FF /* CustomTodoFolder.swift */; };
 		6BF3E1702C3BC9FD00F231FF /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E16F2C3BC9FD00F231FF /* AddFolderViewController.swift */; };
-		6BF3E1722C3BD14100F231FF /* ExtraTodoInFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1712C3BD14100F231FF /* ExtraTodoInFolderViewController.swift */; };
 		6BF3E1862C3E14C700F231FF /* HomeCollectionViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1852C3E14C700F231FF /* HomeCollectionViewSection.swift */; };
 		6BF3E18A2C3E227200F231FF /* HomeCustomFolderTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1892C3E227200F231FF /* HomeCustomFolderTypeCell.swift */; };
 		6BF3E1922C3E2C6000F231FF /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF3E1912C3E2C6000F231FF /* HomeViewModel.swift */; };
@@ -119,6 +119,7 @@
 		6B5DEDEF2C42B91E002B458F /* EnrollInformationNoneSwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrollInformationNoneSwitchTableViewCell.swift; sourceTree = "<group>"; };
 		6B5DEDF12C43A0C6002B458F /* ImageListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListTableViewCell.swift; sourceTree = "<group>"; };
 		6B5DEDF32C43B7AD002B458F /* PriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityTableViewCell.swift; sourceTree = "<group>"; };
+		6B5DEDFB2C441550002B458F /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		6B5EDDBD2C37B1D200D5667D /* CalendarModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModal.swift; sourceTree = "<group>"; };
 		6B5EDDC42C37E25B00D5667D /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		6BE741E72C33DDAE009DEE99 /* Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,7 +156,6 @@
 		6BE7424A2C3549D6009DEE99 /* DateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateManager.swift; sourceTree = "<group>"; };
 		6BF3E16D2C3BC6B800F231FF /* CustomTodoFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTodoFolder.swift; sourceTree = "<group>"; };
 		6BF3E16F2C3BC9FD00F231FF /* AddFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
-		6BF3E1712C3BD14100F231FF /* ExtraTodoInFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraTodoInFolderViewController.swift; sourceTree = "<group>"; };
 		6BF3E1852C3E14C700F231FF /* HomeCollectionViewSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewSection.swift; sourceTree = "<group>"; };
 		6BF3E1892C3E227200F231FF /* HomeCustomFolderTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCustomFolderTypeCell.swift; sourceTree = "<group>"; };
 		6BF3E1912C3E2C6000F231FF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -272,6 +272,14 @@
 			path = CommonView;
 			sourceTree = "<group>";
 		};
+		6B5DEDFD2C441553002B458F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6B5DEDFB2C441550002B458F /* ListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		6BE741DE2C33DDAE009DEE99 = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +353,7 @@
 			isa = PBXGroup;
 			children = (
 				6BE7422D2C343EC5009DEE99 /* Home */,
+				6B5DEDAF2C3E80BA002B458F /* AddTodoFolder */,
 				6BE742222C342075009DEE99 /* Enroll */,
 				6BE742132C33FB49009DEE99 /* List */,
 			);
@@ -355,6 +364,7 @@
 			isa = PBXGroup;
 			children = (
 				6BE742532C3552BE009DEE99 /* ViewController */,
+				6B5DEDFD2C441553002B458F /* ViewModel */,
 				6BE742542C3552C8009DEE99 /* Cell */,
 			);
 			path = List;
@@ -402,7 +412,6 @@
 			isa = PBXGroup;
 			children = (
 				6B5DEDAE2C3E80B4002B458F /* Home */,
-				6B5DEDAF2C3E80BA002B458F /* AddTodoFolder */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -482,7 +491,6 @@
 			isa = PBXGroup;
 			children = (
 				6BE742102C33FAA6009DEE99 /* ListViewController.swift */,
-				6BF3E1712C3BD14100F231FF /* ExtraTodoInFolderViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -637,6 +645,7 @@
 				6B5DEDF42C43B7AD002B458F /* PriorityTableViewCell.swift in Sources */,
 				6B5DEDDE2C411479002B458F /* EnrollInformationTitleTableViewCell.swift in Sources */,
 				6B5DEDE82C415ABA002B458F /* TagCell.swift in Sources */,
+				6B5DEDFC2C441550002B458F /* ListViewModel.swift in Sources */,
 				6BE7420A2C33F7C1009DEE99 /* BaseTableViewCell.swift in Sources */,
 				6BE742182C34010C009DEE99 /* ListTableViewCell.swift in Sources */,
 				6B5DEDDA2C40152B002B458F /* EnrollViewModel.swift in Sources */,
@@ -662,7 +671,6 @@
 				6B5DEDEC2C42B6CB002B458F /* FolderListViewModel.swift in Sources */,
 				6BE742112C33FAA6009DEE99 /* ListViewController.swift in Sources */,
 				6BF3E19A2C3E601E00F231FF /* DesignOfFolderIcon.swift in Sources */,
-				6BF3E1722C3BD14100F231FF /* ExtraTodoInFolderViewController.swift in Sources */,
 				6BF3E16E2C3BC6B800F231FF /* CustomTodoFolder.swift in Sources */,
 				6B5DEDD52C3F8685002B458F /* IconView.swift in Sources */,
 			);

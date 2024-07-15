@@ -47,19 +47,19 @@ enum AddFolderSection: Int, CaseIterable {
             return section
             
         case .selectColor:
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.16),
-                                                  heightDimension: .fractionalWidth(0.16))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1.0),
+                                                  heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .fractionalWidth(0.16))
+                                                   heightDimension: .fractionalHeight(0.36))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: [item])
         
             let section = NSCollectionLayoutSection(group: group)
             
             section.contentInsets = NSDirectionalEdgeInsets(top: 8,
-                                                            leading: 16,
+                                                            leading: 8,
                                                             bottom: 0,
                                                             trailing: 0)
             
