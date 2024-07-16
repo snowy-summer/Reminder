@@ -142,7 +142,7 @@ final class EnrollViewModel {
                 subTitle = newSubTitle
             }
             
-            if let date = todo.deadLine {
+            if let date = newTodo.deadLine {
                 deadLine = date
                 isDateExpand = true
             }

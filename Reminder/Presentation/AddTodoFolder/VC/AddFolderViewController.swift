@@ -91,7 +91,7 @@ extension AddFolderViewController {
         }.store(in: &cancellable)
         
         viewModel.$iconColor.receive(on: DispatchQueue.main)
-            .sink { [weak self] newFolderColor in
+            .sink { [weak self] _ in
             guard let self = self else { return }
             
             addTableView.reloadSections(IndexSet(integer: AddFolderSection.title.rawValue),
@@ -100,7 +100,7 @@ extension AddFolderViewController {
         }.store(in: &cancellable)
         
         viewModel.$iconName.receive(on: DispatchQueue.main)
-            .sink { [weak self] newFolderIconName in
+            .sink { [weak self] _ in
             guard let self = self else { return }
             
             addTableView.reloadSections(IndexSet(integer: AddFolderSection.title.rawValue),
